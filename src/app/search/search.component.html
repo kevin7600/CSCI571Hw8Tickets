@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="jumbotron" style="border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;">
+      <p class="text-center" style="font-weight:bold;">Entertainment Event Ticket Search</p>
+      <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+          <div class="form-group row">
+              <label class="col-3 col-form-label requiredLabel">Keyword</label>
+              <input class="form-control col-9" type="text" id="keyword" name="keyword" [(ngModel)]="formData.keyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" required/>
+              <div *ngIf="keyword.invalid" class="invalid-feedback offset-3">
+                <div>Please enter a keyword.</div>
+              </div>
+          </div>
+          <div class="form-group row">
+              <label class="col-3 col-form-label">Category</label>
+              <select class="form-control col-3" name="Category" id="Category" (change)="getCategory($event)">
+                  <option value="default" selected>All</option>
+                  <option value="music">Music</option>
+                  <option value="sports">Sports</option>
+                  <option value="artsAndTheatre">Arts & Theatre</option>
+                  <option value="film">Film</option>
+                  <option value="miscellaneous">Miscellaneous</option>
+              </select>
+          </div>
+          <div class="form-group row">
+              <label class="col-3 col-form-label">Distance</label>
+              <input class="form-control col-3" type="text" id="distance" name="distance" placeholder="10"  (change)="getDistance($event);" />
+              <select class="form-control col-3 offset-1" name="Category" id="Category" (change)="getDistanceUnits($event)">
+                  <option value="miles" selected>Miles</option>
+                  <option value="kilometers">Kilometers</option>
+              </select>
+          </div>
+          
+          <div class="form-group row" style="margin-bottom:0">
+              <label class="col-3 col-form-label requiredLabel">From</label>
+              <div class="col-9 custom-control custom-radio">
+                <input class="custom-control-input" type="radio" id="hereLocationRadio" name="startLocation" value="here" (change)="radioChangeHandler($event)" checked>
+                <label class="custom-control-label" for="hereLocationRadio">Current location</label>
+              </div>
+              <div class="custom-control custom-radio offset-3 col-9">
+                  <input class="custom-control-input" type="radio" id="otherLocationRadio" name="startLocation" value="other" (change)="radioChangeHandler($event)">
+                  <label class="custom-control-label" for="otherLocationRadio">Other, Please specify:</label>
+              </div>
+                  <input class="offset-3 col-9 form-control" type="text" id="otherLocationText" name="otherLocationText" [disabled]="otherLocationTextDisabled" [(ngModel)]="formData.otherLocationText" #otherLocationText="ngModel" [ngClass]="{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}" [required]="!otherLocationTextDisabled"/>
+                  <div *ngIf="otherLocationText.invalid" class="invalid-feedback offset-3">
+                      <div>Please enter a location.</div>
+                  </div>
+          </div>
+  
+          <div class="form-group row">
+          </div>
+  
+          <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-sm" id="searchButton" value="Search"><i class="material-icons"><div style="font-size:60%;">search</div></i>Search</button>
+              <button type="reset" (click)="Reset();" class="btn btn-light btn-sm" name="clear" value="Clear" style="border: 1px solid #aeaeae; margin-left: 10px;"><i class="material-icons"><div style="font-size:60%;">clear_all</div></i>Clear</button>
+          </div>
+         
+          <input type="hidden" id="myLat" name="myLat">
+          <input type="hidden" id="myLon" name="myLon">
+      </form>
+    </div>
+  </div>
+  
+  
