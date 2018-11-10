@@ -4,9 +4,9 @@
       <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
           <div class="form-group row">
               <label class="col-3 col-form-label requiredLabel">Keyword</label>
-              <input class="form-control col-9" type="text" id="keyword" name="keyword" [(ngModel)]="formData.keyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" required/>
+              <input class="form-control col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" required/>
               <div *ngIf="keyword.invalid" class="invalid-feedback offset-3">
-                <div>Please enter a keyword.</div>
+                <div>Please enter a keyword</div>
               </div>
           </div>
           <div class="form-group row">
@@ -39,12 +39,11 @@
                   <input class="custom-control-input" type="radio" id="otherLocationRadio" name="startLocation" value="other" (change)="radioChangeHandler($event)">
                   <label class="custom-control-label" for="otherLocationRadio">Other, Please specify:</label>
               </div>
-                  <input class="offset-3 col-9 form-control" type="text" id="otherLocationText" name="otherLocationText" [disabled]="otherLocationTextDisabled" [(ngModel)]="formData.otherLocationText" #otherLocationText="ngModel" [ngClass]="{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}" [required]="!otherLocationTextDisabled"/>
+                  <input class="offset-3 col-9 form-control" type="text" id="otherLocationText" name="otherLocationText" [disabled]="otherLocationTextDisabled" [(ngModel)]="myOtherLocationText" #otherLocationText="ngModel" [ngClass]="{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}" [required]="!otherLocationTextDisabled"/>
                   <div *ngIf="otherLocationText.invalid" class="invalid-feedback offset-3">
                       <div>Please enter a location.</div>
                   </div>
           </div>
-  
           <div class="form-group row">
           </div>
   
