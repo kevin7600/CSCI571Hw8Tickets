@@ -2,7 +2,18 @@
     <div class="jumbotron" style="border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;">
       <p class="text-center" style="font-weight:bold;">Entertainment Event Ticket Search</p>
       <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-          <div class="form-group row">
+          
+        <mat-form-field>
+            <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let autComOp of autComOps" [value]="autComOp">{{autComOp}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          
+
+        
+        
+        <div class="form-group row">
               <label class="col-3 col-form-label requiredLabel">Keyword</label>
               <input class="form-control col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" required/>
               <div *ngIf="keyword.invalid" class="invalid-feedback offset-3">

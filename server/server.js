@@ -6,7 +6,7 @@ var apis = require('./routes/apis');
 const cors = require('cors'); 
 var app = express()
 const port = process.env.port || 3000;
-const clientPath=path.join(__dirname, '../client/dist/client');
+const clientPath=path.join(__dirname, 'client');
 // const clientPath=path.join(__dirname, 'client');
 
 // app.set('views', path.join(__dirname, 'views'));

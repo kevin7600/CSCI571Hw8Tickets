@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Services } from '@angular/core/src/view';
 
 import {ServicesService} from '../services.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-search',
@@ -10,16 +11,19 @@ import {ServicesService} from '../services.service';
 })
 export  class SearchComponent{
 
-  constructor(private servicesService:ServicesService){
-    console.log("here");
-    this.servicesService.getRequestToServer().subscribe(temp=>{
-      console.log(temp.json());
-      this.autoCompleteSuggestions=temp.json();
-    })
-    console.log("finished printing service response");
-  }
+  myControl:FormControl=new FormControl();
 
-  autoCompleteSuggestions:JSON;
+
+  constructor(private servicesService:ServicesService){
+    this.servicesService.getRequestToServer().subscribe(temp=>{
+      const arr=temp.json()["_embedded"]["attractions"];
+      for (let i=0; i< arr.length;i++){
+
+        this.autComOps.push(arr[i]['name']);
+      }
+    });
+  }
+  autComOps:string[]=[];
   myKeyword:string = "";
   category:string="default";
   distance:number=10;
@@ -64,7 +68,5 @@ export  class SearchComponent{
     this.distance=10;
     this.distanceUnits="miles";
     this.otherLocationTextDisabled=true;
-    console.log("in reset:");
-    console.log(this.autoCompleteSuggestions["_embedded"]["attractions"]);
   }
 }
