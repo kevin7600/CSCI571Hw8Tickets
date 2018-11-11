@@ -151,139 +151,6 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/search-results/search-results-datasource.ts":
-/*!*************************************************************!*\
-  !*** ./src/app/search-results/search-results-datasource.ts ***!
-  \*************************************************************/
-/*! exports provided: SearchResultsDataSource */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchResultsDataSource", function() { return SearchResultsDataSource; });
-/* harmony import */ var _angular_cdk_collections__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/cdk/collections */ "./node_modules/@angular/cdk/esm5/collections.es5.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-// TODO: replace this with real data from your application
-// const EXAMPLE_DATA: SearchResultsItem[] = [
-//   {id: 1, name: 'Hydrogen'},
-//   {id: 2, name: 'Helium'},
-//   {id: 3, name: 'Lithium'},
-//   {id: 4, name: 'Beryllium'},
-//   {id: 5, name: 'Boron'},
-//   {id: 6, name: 'Carbon'},
-//   {id: 7, name: 'Nitrogen'},
-//   {id: 8, name: 'Oxygen'},
-//   {id: 9, name: 'Fluorine'},
-//   {id: 10, name: 'Neon'},
-//   {id: 11, name: 'Sodium'},
-//   {id: 12, name: 'Magnesium'},
-//   {id: 13, name: 'Aluminum'},
-//   {id: 14, name: 'Silicon'},
-//   {id: 15, name: 'Phosphorus'},
-//   {id: 16, name: 'Sulfur'},
-//   {id: 17, name: 'Chlorine'},
-//   {id: 18, name: 'Argon'},
-//   {id: 19, name: 'Potassium'},
-//   {id: 20, name: 'Calcium'},
-// ];
-/**
- * Data source for the SearchResults view. This class should
- * encapsulate all logic for fetching and manipulating the displayed data
- * (including sorting, pagination, and filtering).
- */
-var SearchResultsDataSource = /** @class */ (function (_super) {
-    __extends(SearchResultsDataSource, _super);
-    function SearchResultsDataSource(paginator, sort, servicesService) {
-        var _this = _super.call(this) || this;
-        _this.paginator = paginator;
-        _this.sort = sort;
-        _this.servicesService = servicesService;
-        _this.results = [
-            { id: 1, date: "10-5-2014", event: "sex on beach", category: "nsfw", venueInfo: "idk", favorite: "x" },
-            { id: 1, date: "10-5-2014", event: "sex on beach", category: "nsfw", venueInfo: "idk", favorite: "x" },
-            { id: 1, date: "10-5-2014", event: "sex on beach", category: "nsfw", venueInfo: "idk", favorite: "x" },
-        ];
-        _this.data = _this.results;
-        _this.servicesService.searchResults.subscribe(function (results) { return _this.data = results; });
-        return _this;
-    }
-    /**
-     * Connect this data source to the table. The table will only update when
-     * the returned stream emits new items.
-     * @returns A stream of the items to be rendered.
-     */
-    SearchResultsDataSource.prototype.connect = function () {
-        var _this = this;
-        // Combine everything that affects the rendered data into one update
-        // stream for the data-table to consume.
-        var dataMutations = [
-            Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["of"])(this.data),
-            this.paginator.page,
-            this.sort.sortChange
-        ];
-        // Set the paginator's length
-        this.paginator.length = this.data.length;
-        return rxjs__WEBPACK_IMPORTED_MODULE_2__["merge"].apply(void 0, dataMutations).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function () {
-            return _this.getPagedData(_this.getSortedData(_this.data.slice()));
-        }));
-    };
-    /**
-     *  Called when the table is being destroyed. Use this function, to clean up
-     * any open connections or free any held resources that were set up during connect.
-     */
-    SearchResultsDataSource.prototype.disconnect = function () { };
-    /**
-     * Paginate the data (client-side). If you're using server-side pagination,
-     * this would be replaced by requesting the appropriate data from the server.
-     */
-    SearchResultsDataSource.prototype.getPagedData = function (data) {
-        var startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-        return data.splice(startIndex, this.paginator.pageSize);
-    };
-    /**
-     * Sort the data (client-side). If you're using server-side sorting,
-     * this would be replaced by requesting the appropriate data from the server.
-     */
-    SearchResultsDataSource.prototype.getSortedData = function (data) {
-        var _this = this;
-        if (!this.sort.active || this.sort.direction === '') {
-            return data;
-        }
-        return data.sort(function (a, b) {
-            var isAsc = _this.sort.direction === 'asc';
-            // switch (this.sort.active) {
-            //   case 'name': return compare(a.name, b.name, isAsc);
-            //   case 'id': return compare(+a.id, +b.id, isAsc);
-            //   default: return 0;
-            // }
-            return 0;
-        });
-    };
-    return SearchResultsDataSource;
-}(_angular_cdk_collections__WEBPACK_IMPORTED_MODULE_0__["DataSource"]));
-
-/** Simple sort comparator for example ID/Name columns (for client-side sorting). */
-function compare(a, b, isAsc) {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
-
-
-/***/ }),
-
 /***/ "./src/app/search-results/search-results.component.css":
 /*!*************************************************************!*\
   !*** ./src/app/search-results/search-results.component.css ***!
@@ -302,7 +169,7 @@ module.exports = ".full-width-table {\n  width: 100%;\n}\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"mat-elevation-z8\">\n    <table mat-table class=\"full-width-table\" [dataSource]=\"dataSource\" matSort aria-label=\"Elements\">\n      <!-- Id Column -->\n      <ng-container matColumnDef=\"id\">\n        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.id}}</td>\n      </ng-container>\n\n      <!-- date Column -->\n      <ng-container matColumnDef=\"date\">\n        <th mat-header-cell *matHeaderCellDef mat-sort-header>date</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.date}}</td>\n      </ng-container>\n\n            <!-- event Column -->\n            <ng-container matColumnDef=\"event\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header>event</th>\n              <td mat-cell *matCellDef=\"let row\">{{row.event}}</td>\n            </ng-container>\n\n                  <!-- category Column -->\n      <ng-container matColumnDef=\"category\">\n        <th mat-header-cell *matHeaderCellDef mat-sort-header>category</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.category}}</td>\n      </ng-container>\n\n            <!-- venueInfo Column -->\n            <ng-container matColumnDef=\"venueInfo\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header>venueInfo</th>\n              <td mat-cell *matCellDef=\"let row\">{{row.venueInfo}}</td>\n            </ng-container>\n\n                  <!-- favorite Column -->\n      <ng-container matColumnDef=\"favorite\">\n        <th mat-header-cell *matHeaderCellDef mat-sort-header>favorite</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.favorite}}</td>\n      </ng-container>\n\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n\n    <mat-paginator #paginator\n        [length]=\"dataSource.data.length\"\n        [pageIndex]=\"0\"\n        [pageSize]=\"50\"\n        [pageSizeOptions]=\"[25, 50, 100, 250]\">\n    </mat-paginator>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <div class=\"mat-elevation-z8\">\n    <table mat-table class=\"full-width-table\" [dataSource]=\"dataSource\" aria-label=\"Elements\">\n      <!-- Id Column -->\n      <ng-container matColumnDef=\"id\">\n        <th mat-header-cell *matHeaderCellDef>#</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.id}}</td>\n      </ng-container>\n      <!-- date Column -->\n      <ng-container matColumnDef=\"date\">\n        <th mat-header-cell *matHeaderCellDef>date</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.date}}</td>\n      </ng-container>\n      <!-- event Column -->\n      <ng-container matColumnDef=\"event\">\n        <th mat-header-cell *matHeaderCellDef>event</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.event}}</td>\n      </ng-container>\n      <!-- category Column -->\n      <ng-container matColumnDef=\"category\">\n        <th mat-header-cell *matHeaderCellDef>category</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.category}}</td>\n      </ng-container>\n      <!-- venueInfo Column -->\n      <ng-container matColumnDef=\"venueInfo\">\n        <th mat-header-cell *matHeaderCellDef>venueInfo</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.venueInfo}}</td>\n      </ng-container>\n      <!-- favorite Column -->\n      <ng-container matColumnDef=\"favorite\">\n        <th mat-header-cell *matHeaderCellDef>favorite</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.favorite}}</td>\n      </ng-container>\n\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -310,16 +177,26 @@ module.exports = "<div class=\"container\">\n  <div class=\"mat-elevation-z8\">\
 /*!************************************************************!*\
   !*** ./src/app/search-results/search-results.component.ts ***!
   \************************************************************/
-/*! exports provided: SearchResultsComponent */
+/*! exports provided: SearchResultsComponent, SearchResultsDataSource */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchResultsComponent", function() { return SearchResultsComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchResultsDataSource", function() { return SearchResultsDataSource; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _search_results_datasource__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search-results-datasource */ "./src/app/search-results/search-results-datasource.ts");
-/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
+/* harmony import */ var _angular_cdk_collections__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/cdk/collections */ "./node_modules/@angular/cdk/esm5/collections.es5.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -332,34 +209,38 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var SearchResultsComponent = /** @class */ (function () {
     function SearchResultsComponent(servicesService) {
         this.servicesService = servicesService;
-        /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
         this.displayedColumns = ['id', 'date', 'event', 'category', 'venueInfo', 'favorite'];
     }
     SearchResultsComponent.prototype.ngOnInit = function () {
-        this.dataSource = new _search_results_datasource__WEBPACK_IMPORTED_MODULE_2__["SearchResultsDataSource"](this.paginator, this.sort, this.servicesService);
+        this.dataSource = new SearchResultsDataSource(this.servicesService.searchResultsObserver);
     };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"]),
-        __metadata("design:type", _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"])
-    ], SearchResultsComponent.prototype, "paginator", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSort"]),
-        __metadata("design:type", _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSort"])
-    ], SearchResultsComponent.prototype, "sort", void 0);
     SearchResultsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-search-results',
             template: __webpack_require__(/*! ./search-results.component.html */ "./src/app/search-results/search-results.component.html"),
             styles: [__webpack_require__(/*! ./search-results.component.css */ "./src/app/search-results/search-results.component.css")],
         }),
-        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_3__["ServicesService"]])
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_2__["ServicesService"]])
     ], SearchResultsComponent);
     return SearchResultsComponent;
 }());
+
+var SearchResultsDataSource = /** @class */ (function (_super) {
+    __extends(SearchResultsDataSource, _super);
+    function SearchResultsDataSource(observer) {
+        var _this = _super.call(this) || this;
+        _this.observer = observer;
+        return _this;
+    }
+    SearchResultsDataSource.prototype.connect = function () {
+        return this.observer;
+    };
+    SearchResultsDataSource.prototype.disconnect = function () { };
+    return SearchResultsDataSource;
+}(_angular_cdk_collections__WEBPACK_IMPORTED_MODULE_1__["DataSource"]));
 
 
 
@@ -503,13 +384,15 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var ServicesService = /** @class */ (function () {
     function ServicesService(http) {
         this.http = http;
-        this.searchResultsSource = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]); //after clicking "search" this is populated with next value
-        this.searchResults = this.searchResultsSource.asObservable(); //this is the current value we see
+        this.searchResultsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]); //after clicking "search" this is populated with next value
+        this.searchResultsObserver = this.searchResultsSubject.asObservable(); //this is the current value we see
         this.AutComCount = 0; //so newer auto complete requests will overwrite previous requests
         console.log("services initialized");
     }
     ServicesService.prototype.sendAutoCompleteRequest = function (keyword) {
         var _this = this;
+        if (!keyword)
+            return; //don't autocomplete when there isn't any keyword
         this.AutComCount += 1;
         var myAutoComCount = this.AutComCount;
         var results = [];
@@ -544,7 +427,6 @@ var ServicesService = /** @class */ (function () {
             + '&distanceUnits=' + distanceUnits + '&otherLocationKeywords=' + otherLocationKeywords
             + '&otherLocationTextDisabled=' + otherLocationTextDisabled.toString() + '&lat=' + curLocation['lat']
             + '&lon=' + curLocation['lon']).subscribe(function (temp) {
-            console.log(temp.json());
             var arr = temp.json();
             var results = [];
             for (var i = 0; i < arr.length; i++) {
@@ -560,8 +442,7 @@ var ServicesService = /** @class */ (function () {
                 results[i]['id'] = i + 1;
                 results[i]['favorite'] = 'X';
             }
-            _this.searchResultsSource.next(results);
-            console.log(results);
+            _this.searchResultsSubject.next(results);
         });
     };
     ServicesService = __decorate([

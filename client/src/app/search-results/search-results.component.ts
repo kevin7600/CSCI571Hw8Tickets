@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
-import { SearchResultsDataSource } from './search-results-datasource';
 
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs';
 import {ServicesService} from '../services.service';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -11,17 +11,21 @@ import {ServicesService} from '../services.service';
   styleUrls: ['./search-results.component.css'],
 })
 export class SearchResultsComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
   dataSource: SearchResultsDataSource;
-
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'date', 'event', 'category', 'venueInfo', 'favorite'];
+  constructor(private servicesService:ServicesService){}
 
-  constructor(private servicesService:ServicesService){
-
-  }
   ngOnInit() {
-    this.dataSource = new SearchResultsDataSource(this.paginator, this.sort, this.servicesService);
+    this.dataSource = new SearchResultsDataSource(this.servicesService.searchResultsObserver);
   }
+}
+
+export class SearchResultsDataSource extends DataSource<any> {
+  constructor(public observer: Observable<any[]>) {super();}
+
+  connect(): Observable<any[]> {
+    return this.observer;
+  }
+  disconnect() {}
 }

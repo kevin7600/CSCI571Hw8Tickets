@@ -6,14 +6,15 @@ import { ArrayType } from '@angular/compiler';
   providedIn: 'root'
 })
 export class ServicesService {
-  searchResultsSource= new BehaviorSubject([]);//after clicking "search" this is populated with next value
-  searchResults=this.searchResultsSource.asObservable();//this is the current value we see
+  searchResultsSubject= new BehaviorSubject([]);//after clicking "search" this is populated with next value
+  searchResultsObserver=this.searchResultsSubject.asObservable();//this is the current value we see
   constructor(private http:Http) { 
     console.log("services initialized");
   }
   AutComCount:number=0;//so newer auto complete requests will overwrite previous requests
 
   sendAutoCompleteRequest(keyword:string): string[]{
+    if (!keyword)return;//don't autocomplete when there isn't any keyword
     this.AutComCount+=1;
     let myAutoComCount=this.AutComCount;
     let results:string[]=[];
@@ -52,7 +53,6 @@ export class ServicesService {
     +'&distanceUnits='+distanceUnits+'&otherLocationKeywords='+otherLocationKeywords
     +'&otherLocationTextDisabled='+otherLocationTextDisabled.toString()+'&lat='+curLocation['lat']
     +'&lon='+curLocation['lon']).subscribe(temp=>{
-      console.log(temp.json());
       let arr=temp.json();
       let results=[];
       for (let i=0;i<arr.length;i++){
@@ -68,8 +68,7 @@ export class ServicesService {
         results[i]['id']=i+1;
         results[i]['favorite']='X';
       }
-      this.searchResultsSource.next(results);
-      console.log(results);
+      this.searchResultsSubject.next(results);
     });
   }
 }
