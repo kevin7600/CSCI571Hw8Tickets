@@ -11,17 +11,8 @@ import { FormControl } from '@angular/forms';
 })
 export  class SearchComponent{
 
-  myControl:FormControl=new FormControl();
-
-
   constructor(private servicesService:ServicesService){
-    this.servicesService.getRequestToServer().subscribe(temp=>{
-      const arr=temp.json()["_embedded"]["attractions"];
-      for (let i=0; i< arr.length;i++){
 
-        this.autComOps.push(arr[i]['name']);
-      }
-    });
   }
   autComOps:string[]=[];
   myKeyword:string = "";
@@ -59,6 +50,11 @@ export  class SearchComponent{
       }
     }
     console.log(this.distance);
+  }
+
+  getAutoSuggestions(){
+
+    this.autComOps = this.servicesService.getRequestToServer(this.myKeyword);
   }
   onSubmit(){
     alert('success!' + " " + this.myKeyword +" " + this.category + " " + this.distance + " "+this.distanceUnits + " " + this.myOtherLocationText);

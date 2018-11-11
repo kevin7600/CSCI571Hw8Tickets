@@ -4,27 +4,15 @@ var mongojs = require('mongojs');
 var request=require('request');
 
 var db = mongojs('mongodb://kevin:kirbyex7600@ds157923.mlab.com:57923/mytasklist', ['tasks'])
-const TicketAPIKey='https://app.ticketmaster.com/discovery/v2/suggest?apikey=WUZpipDRqIHiV8jTieLC9mWxEgPBz15c&keyword=laker';
+const TicketAPIKey='https://app.ticketmaster.com/discovery/v2/suggest?apikey=WUZpipDRqIHiV8jTieLC9mWxEgPBz15c&keyword=';
 //Get all apis
-router.get('/autocomplete',function(req, res, next){
-    console.log("doingautocomplete");
-    var temp2;
-    var temp=       request.get(
-                            {url: TicketAPIKey,json: true},
-                            function(err,response,body){
-                        if(err){
-                            console.log("error in autocomplete");
-                        }
-                    }).pipe(res);
-        
-    // res.json(temp2);
-    // db.tasks.find(function(err, tasks){
-    //     if(err){
-    //         console.log("error");
-    //         res.send(err);
-    //     }
-    //     res.json(tasks);
-    // });
+router.get('/autocomplete/:keyword',function(req, res, next){
+    request.get({url: TicketAPIKey+req.params.keyword,json: true},
+        function(err,response,body){
+            if(err){
+            console.log("error in autocomplete");
+            }
+        }).pipe(res);
 });
 
 // //get single api

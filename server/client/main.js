@@ -152,7 +152,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".requiredLabel::after{\r\n    content:\" *\";\r\n    color:red;\r\n}"
+module.exports = ".requiredLabel::after{\r\n    content:\" *\";\r\n    color:red;\r\n}\r\n\r\nmat-form-field {\r\n    width:75%\r\n}"
 
 /***/ }),
 
@@ -163,7 +163,7 @@ module.exports = ".requiredLabel::after{\r\n    content:\" *\";\r\n    color:red
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n    <div class=\"jumbotron\" style=\"border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;\">\r\n      <p class=\"text-center\" style=\"font-weight:bold;\">Entertainment Event Ticket Search</p>\r\n      <form name=\"myform\" method=\"POST\" id=\"myForm\" (ngSubmit)=\"f.form.valid && onSubmit()\" #f=\"ngForm\" novalidate>\r\n                    \r\n        \r\n        \r\n        <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label requiredLabel\">Keyword</label>\r\n              <mat-form-field>\r\n                <input class=\"form-control col-9\" type=\"text\" matInput [formControl]=\"myControl\" [matAutocomplete]=\"auto\" id=\"keyword\" name=\"keyword\" [(ngModel)]=\"myKeyword\" #keyword=\"ngModel\" [ngClass]=\"{ 'is-invalid': keyword.invalid}\" required/>\r\n                <mat-autocomplete #auto=\"matAutocomplete\">\r\n                    <mat-option *ngFor=\"let autComOp of autComOps\" [value]=\"autComOp\">{{autComOp}}</mat-option>\r\n                </mat-autocomplete>\r\n              </mat-form-field>\r\n\r\n              <div *ngIf=\"keyword.invalid\" class=\"invalid-feedback offset-3\">\r\n                <div>Please enter a keyword</div>\r\n              </div>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label\">Category</label>\r\n              <select class=\"form-control col-3\" name=\"Category\" id=\"Category\" (change)=\"getCategory($event)\">\r\n                  <option value=\"default\" selected>All</option>\r\n                  <option value=\"music\">Music</option>\r\n                  <option value=\"sports\">Sports</option>\r\n                  <option value=\"artsAndTheatre\">Arts & Theatre</option>\r\n                  <option value=\"film\">Film</option>\r\n                  <option value=\"miscellaneous\">Miscellaneous</option>\r\n              </select>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label\">Distance</label>\r\n              <input class=\"form-control col-3\" type=\"text\" id=\"distance\" name=\"distance\" placeholder=\"10\"  (change)=\"getDistance($event);\" />\r\n              <select class=\"form-control col-3 offset-1\" name=\"Category\" id=\"Category\" (change)=\"getDistanceUnits($event)\">\r\n                  <option value=\"miles\" selected>Miles</option>\r\n                  <option value=\"kilometers\">Kilometers</option>\r\n              </select>\r\n          </div>\r\n          \r\n          <div class=\"form-group row\" style=\"margin-bottom:0\">\r\n              <label class=\"col-3 col-form-label requiredLabel\">From</label>\r\n              <div class=\"col-9 custom-control custom-radio\">\r\n                <input class=\"custom-control-input\" type=\"radio\" id=\"hereLocationRadio\" name=\"startLocation\" value=\"here\" (change)=\"radioChangeHandler($event)\" checked>\r\n                <label class=\"custom-control-label\" for=\"hereLocationRadio\">Current location</label>\r\n              </div>\r\n              <div class=\"custom-control custom-radio offset-3 col-9\">\r\n                  <input class=\"custom-control-input\" type=\"radio\" id=\"otherLocationRadio\" name=\"startLocation\" value=\"other\" (change)=\"radioChangeHandler($event)\">\r\n                  <label class=\"custom-control-label\" for=\"otherLocationRadio\">Other, Please specify:</label>\r\n              </div>\r\n                  <input class=\"offset-3 col-9 form-control\" type=\"text\" id=\"otherLocationText\" name=\"otherLocationText\" [disabled]=\"otherLocationTextDisabled\" [(ngModel)]=\"myOtherLocationText\" #otherLocationText=\"ngModel\" [ngClass]=\"{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}\" [required]=\"!otherLocationTextDisabled\"/>\r\n                  <div *ngIf=\"otherLocationText.invalid\" class=\"invalid-feedback offset-3\">\r\n                      <div>Please enter a location.</div>\r\n                  </div>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n          </div>\r\n  \r\n          <div class=\"form-group\">\r\n              <button type=\"submit\" class=\"btn btn-primary btn-sm\" id=\"searchButton\" value=\"Search\"><i class=\"material-icons\"><div style=\"font-size:60%;\">search</div></i>Search</button>\r\n              <button type=\"reset\" (click)=\"Reset();\" class=\"btn btn-light btn-sm\" name=\"clear\" value=\"Clear\" style=\"border: 1px solid #aeaeae; margin-left: 10px;\"><i class=\"material-icons\"><div style=\"font-size:60%;\">clear_all</div></i>Clear</button>\r\n          </div>\r\n         \r\n          <input type=\"hidden\" id=\"myLat\" name=\"myLat\">\r\n          <input type=\"hidden\" id=\"myLon\" name=\"myLon\">\r\n      </form>\r\n    </div>\r\n  </div>\r\n  \r\n  "
+module.exports = "<div class=\"container\">\r\n    <div class=\"jumbotron\" style=\"border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;\">\r\n      <p class=\"text-center\" style=\"font-weight:bold;\">Entertainment Event Ticket Search</p>\r\n      <form name=\"myform\" method=\"POST\" id=\"myForm\" (ngSubmit)=\"f.form.valid && onSubmit()\" #f=\"ngForm\" novalidate>\r\n          \r\n\r\n        \r\n        <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label requiredLabel\">Keyword</label>\r\n\r\n              <mat-form-field  appearance=\"outline\">\r\n              <input matInput [matAutocomplete]=\"auto\" class=\"col-9\" type=\"text\" id=\"keyword\" name=\"keyword\" [(ngModel)]=\"myKeyword\" #keyword=\"ngModel\" [ngClass]=\"{ 'is-invalid': keyword.invalid}\" (ngModelChange)=\"getAutoSuggestions();\" required/>\r\n              <mat-autocomplete #auto=\"matAutocomplete\">\r\n                    <mat-option *ngFor=\"let autComOp of autComOps\" [value]=\"autComOp\">{{autComOp}}</mat-option>\r\n            </mat-autocomplete>\r\n          </mat-form-field>\r\n              <div *ngIf=\"keyword.invalid\" class=\"invalid-feedback offset-3\">\r\n                <div>Please enter a keyword</div>\r\n              </div>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label\">Category</label>\r\n              <select class=\"form-control col-3\" name=\"Category\" id=\"Category\" (change)=\"getCategory($event)\">\r\n                  <option value=\"default\" selected>All</option>\r\n                  <option value=\"music\">Music</option>\r\n                  <option value=\"sports\">Sports</option>\r\n                  <option value=\"artsAndTheatre\">Arts & Theatre</option>\r\n                  <option value=\"film\">Film</option>\r\n                  <option value=\"miscellaneous\">Miscellaneous</option>\r\n              </select>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n              <label class=\"col-3 col-form-label\">Distance</label>\r\n              <input class=\"form-control col-3\" type=\"text\" id=\"distance\" name=\"distance\" placeholder=\"10\"  (change)=\"getDistance($event);\" />\r\n              <select class=\"form-control col-3 offset-1\" name=\"Category\" id=\"Category\" (change)=\"getDistanceUnits($event)\">\r\n                  <option value=\"miles\" selected>Miles</option>\r\n                  <option value=\"kilometers\">Kilometers</option>\r\n              </select>\r\n          </div>\r\n          \r\n          <div class=\"form-group row\" style=\"margin-bottom:0\">\r\n              <label class=\"col-3 col-form-label requiredLabel\">From</label>\r\n              <div class=\"col-9 custom-control custom-radio\">\r\n                <input class=\"custom-control-input\" type=\"radio\" id=\"hereLocationRadio\" name=\"startLocation\" value=\"here\" (change)=\"radioChangeHandler($event)\" checked>\r\n                <label class=\"custom-control-label\" for=\"hereLocationRadio\">Current location</label>\r\n              </div>\r\n              <div class=\"custom-control custom-radio offset-3 col-9\">\r\n                  <input class=\"custom-control-input\" type=\"radio\" id=\"otherLocationRadio\" name=\"startLocation\" value=\"other\" (change)=\"radioChangeHandler($event)\">\r\n                  <label class=\"custom-control-label\" for=\"otherLocationRadio\">Other, Please specify:</label>\r\n              </div>\r\n                  <input class=\"offset-3 col-9 form-control\" type=\"text\" id=\"otherLocationText\" name=\"otherLocationText\" [disabled]=\"otherLocationTextDisabled\" [(ngModel)]=\"myOtherLocationText\" #otherLocationText=\"ngModel\" [ngClass]=\"{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}\" [required]=\"!otherLocationTextDisabled\"/>\r\n                  <div *ngIf=\"otherLocationText.invalid\" class=\"invalid-feedback offset-3\">\r\n                      <div>Please enter a location.</div>\r\n                  </div>\r\n          </div>\r\n          <div class=\"form-group row\">\r\n          </div>\r\n  \r\n          <div class=\"form-group\">\r\n              <button type=\"submit\" class=\"btn btn-primary btn-sm\" id=\"searchButton\" value=\"Search\"><i class=\"material-icons\"><div style=\"font-size:60%;\">search</div></i>Search</button>\r\n              <button type=\"reset\" (click)=\"Reset();\" class=\"btn btn-light btn-sm\" name=\"clear\" value=\"Clear\" style=\"border: 1px solid #aeaeae; margin-left: 10px;\"><i class=\"material-icons\"><div style=\"font-size:60%;\">clear_all</div></i>Clear</button>\r\n          </div>\r\n         \r\n          <input type=\"hidden\" id=\"myLat\" name=\"myLat\">\r\n          <input type=\"hidden\" id=\"myLon\" name=\"myLon\">\r\n      </form>\r\n    </div>\r\n  </div>\r\n  \r\n  "
 
 /***/ }),
 
@@ -179,7 +179,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchComponent", function() { return SearchComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -191,12 +190,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-
 var SearchComponent = /** @class */ (function () {
     function SearchComponent(servicesService) {
-        var _this = this;
         this.servicesService = servicesService;
-        this.myControl = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]();
         this.autComOps = [];
         this.myKeyword = "";
         this.category = "default";
@@ -204,12 +200,6 @@ var SearchComponent = /** @class */ (function () {
         this.distanceUnits = "miles";
         this.myOtherLocationText = "";
         this.otherLocationTextDisabled = true;
-        this.servicesService.getRequestToServer().subscribe(function (temp) {
-            var arr = temp.json()["_embedded"]["attractions"];
-            for (var i = 0; i < arr.length; i++) {
-                _this.autComOps.push(arr[i]['name']);
-            }
-        });
     }
     SearchComponent.prototype.radioChangeHandler = function (event) {
         if (event.target.value == "other") {
@@ -239,6 +229,9 @@ var SearchComponent = /** @class */ (function () {
             }
         }
         console.log(this.distance);
+    };
+    SearchComponent.prototype.getAutoSuggestions = function () {
+        this.autComOps = this.servicesService.getRequestToServer(this.myKeyword);
     };
     SearchComponent.prototype.onSubmit = function () {
         alert('success!' + " " + this.myKeyword + " " + this.category + " " + this.distance + " " + this.distanceUnits + " " + this.myOtherLocationText);
@@ -290,11 +283,27 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var ServicesService = /** @class */ (function () {
     function ServicesService(http) {
         this.http = http;
+        this.AutComCount = 0; //so newer auto complete requests will overwrite previous requests
         console.log("services initialized");
     }
-    ServicesService.prototype.getRequestToServer = function () {
+    ServicesService.prototype.getRequestToServer = function (keyword) {
+        var _this = this;
+        this.AutComCount += 1;
+        var myAutoComCount = this.AutComCount;
         console.log("getting request to server...");
-        return this.http.get('api/autocomplete');
+        var results = [];
+        setTimeout(function () {
+            if (myAutoComCount == _this.AutComCount) {
+                console.log("resetting autocomplete...");
+                _this.http.get('api/autocomplete/' + keyword).subscribe(function (temp) {
+                    var arr = temp.json()["_embedded"]["attractions"];
+                    for (var i = 0; i < arr.length; i++) {
+                        results.push(arr[i]['name']);
+                    }
+                });
+            }
+        }, 1000);
+        return results;
     };
     ServicesService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

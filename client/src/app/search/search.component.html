@@ -3,19 +3,17 @@
       <p class="text-center" style="font-weight:bold;">Entertainment Event Ticket Search</p>
       <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
           
-        <mat-form-field>
-            <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let autComOp of autComOps" [value]="autComOp">{{autComOp}}</mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          
 
-        
         
         <div class="form-group row">
               <label class="col-3 col-form-label requiredLabel">Keyword</label>
-              <input class="form-control col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" required/>
+
+              <mat-form-field  appearance="outline">
+              <input matInput [matAutocomplete]="auto" class="col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" (ngModelChange)="getAutoSuggestions();" required/>
+              <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let autComOp of autComOps" [value]="autComOp">{{autComOp}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
               <div *ngIf="keyword.invalid" class="invalid-feedback offset-3">
                 <div>Please enter a keyword</div>
               </div>
