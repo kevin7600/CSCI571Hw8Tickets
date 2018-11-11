@@ -54,7 +54,6 @@ export  class SearchComponent{
     this.autComOps = this.servicesService.sendAutoCompleteRequest(this.myKeyword);
   }
   onSubmit(){
-    console.log("category: "+this.category);
     this.servicesService.GetSearchResults(this.myKeyword,this.category,this.distance,
       this.distanceUnits,this.myOtherLocationText,this.otherLocationTextDisabled,this.currentLocation);
   }
