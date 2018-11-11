@@ -12,8 +12,9 @@ import { FormControl } from '@angular/forms';
 export  class SearchComponent{
 
   constructor(private servicesService:ServicesService){
-
+    this.currentLocation=this.servicesService.GetCurrentLocation();
   }
+  currentLocation:{lat:number, lon:number}={lat:-1,lon:-1};
   autComOps:string[]=[];
   myKeyword:string = "";
   category:string="default";
@@ -29,15 +30,12 @@ export  class SearchComponent{
       this.otherLocationTextDisabled=true;
 
     }
-    console.log(event.target.value);
   }
   getCategory(event: any){
     this.category=event.target.value;
-    console.log(this.category);
   }
   getDistanceUnits(event:any){
     this.distanceUnits=event.target.value;
-    console.log(this.distanceUnits);
   }
   getDistance(event:any){
     if (event.target.value==""){
@@ -49,15 +47,16 @@ export  class SearchComponent{
         console.log("this is NaN");
       }
     }
-    console.log(this.distance);
   }
 
   getAutoSuggestions(){
 
-    this.autComOps = this.servicesService.getRequestToServer(this.myKeyword);
+    this.autComOps = this.servicesService.sendAutoCompleteRequest(this.myKeyword);
   }
   onSubmit(){
-    alert('success!' + " " + this.myKeyword +" " + this.category + " " + this.distance + " "+this.distanceUnits + " " + this.myOtherLocationText);
+    console.log("category: "+this.category);
+    this.servicesService.GetSearchResults(this.myKeyword,this.category,this.distance,
+      this.distanceUnits,this.myOtherLocationText,this.otherLocationTextDisabled,this.currentLocation);
   }
   Reset(){
     this.category="default";

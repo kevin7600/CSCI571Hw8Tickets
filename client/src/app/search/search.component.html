@@ -57,7 +57,7 @@
           </div>
   
           <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-sm" id="searchButton" value="Search"><i class="material-icons"><div style="font-size:60%;">search</div></i>Search</button>
+              <button type="submit" class="btn btn-primary btn-sm" id="searchButton" value="Search" [disabled]="currentLocation['lat']==-1"><i class="material-icons"><div style="font-size:60%;">search</div></i>Search</button>
               <button type="reset" (click)="Reset();" class="btn btn-light btn-sm" name="clear" value="Clear" style="border: 1px solid #aeaeae; margin-left: 10px;"><i class="material-icons"><div style="font-size:60%;">clear_all</div></i>Clear</button>
           </div>
          
