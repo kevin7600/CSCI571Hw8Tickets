@@ -56,7 +56,9 @@ export class ServicesService {
       let arr=temp.json();
       let results=[];
       for (let i=0;i<arr.length;i++){
-        results.push({date: arr[i]['dates']['start']['localDate']
+        results.push({
+          id: arr[i]['id']
+        , date: arr[i]['dates']['start']['localDate']
         , event: arr[i]['name']
         , category: arr[i]['classifications'][0]['segment']['name']
         , venueInfo: arr[i]['_embedded']['venues'][0]['name']});
@@ -64,11 +66,41 @@ export class ServicesService {
       results.sort((a,b)=>{
         return new Date(a.date).getTime()-new Date(b.date).getTime();
       });
-      for (let i=0;i<results.length;i++){
-        results[i]['id']=i+1;
-        results[i]['favorite']='X';
-      }
+      // for (let i=0;i<results.length;i++){
+      //   results[i]['id']=i+1;
+      //   results[i]['favorite']='X';
+      // }
       this.searchResultsSubject.next(results);
     });
+  }
+
+  GetEventDetails(id:string){
+    var results={};
+    this.http.get('api/eventdetails?id='+id).subscribe(temp=>{
+      let arr=temp.json();
+      results={
+        artists: [],
+        venue: arr['_embedded']['venues'][0]['name'],
+        date: arr['dates']['start']['localDate'],
+        time: arr['dates']['start']['localTime'],
+        category: [arr['classifications'][0]['segment']['name']
+                  ,arr['classifications'][0]['genre']['name']],
+        ticketStatus: arr['dates']['status']['code'],
+        buyTicketAt: arr['url'],
+        seatMap: arr['seatmap']['staticUrl']
+      };
+
+      if (arr['priceRanges']!=null){
+        results['priceRange']=[arr['priceRanges'][0]['min']
+                              ,arr['priceRanges'][0]['max']];
+      }
+      for (let i=0;i<arr['_embedded']['attractions'].length;i++){
+        results['artists'].push(arr['_embedded']['attractions'][i]['name']);
+      }
+      console.log(results);
+      // console.log(temp);
+    });
+    console.log(results);
+    return results;
   }
 }

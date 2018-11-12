@@ -138,7 +138,8 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatAutocompleteModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatPaginatorModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSortModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSortModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTooltipModule"]
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
@@ -158,7 +159,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".full-width-table {\n  width: 100%;\n}\n"
+module.exports = ".full-width-table {\n  width: 100%;\n}\n\n.star{\n  color: #e5c600;\n}\n\n.starBorder{\n  color: black; \n}\n\n.starButton{\n  background-color:white;\n}\n\n.blue{\n  color:#3a47ff;\n}"
 
 /***/ }),
 
@@ -169,7 +170,7 @@ module.exports = ".full-width-table {\n  width: 100%;\n}\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"mat-elevation-z8\">\n    <table mat-table class=\"full-width-table\" [dataSource]=\"dataSource\" aria-label=\"Elements\">\n      <!-- Id Column -->\n      <ng-container matColumnDef=\"id\">\n        <th mat-header-cell *matHeaderCellDef>#</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.id}}</td>\n      </ng-container>\n      <!-- date Column -->\n      <ng-container matColumnDef=\"date\">\n        <th mat-header-cell *matHeaderCellDef>date</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.date}}</td>\n      </ng-container>\n      <!-- event Column -->\n      <ng-container matColumnDef=\"event\">\n        <th mat-header-cell *matHeaderCellDef>event</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.event}}</td>\n      </ng-container>\n      <!-- category Column -->\n      <ng-container matColumnDef=\"category\">\n        <th mat-header-cell *matHeaderCellDef>category</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.category}}</td>\n      </ng-container>\n      <!-- venueInfo Column -->\n      <ng-container matColumnDef=\"venueInfo\">\n        <th mat-header-cell *matHeaderCellDef>venueInfo</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.venueInfo}}</td>\n      </ng-container>\n      <!-- favorite Column -->\n      <ng-container matColumnDef=\"favorite\">\n        <th mat-header-cell *matHeaderCellDef>favorite</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.favorite}}</td>\n      </ng-container>\n\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <button (click)=\"ShowResultsTab();\" class=\"btn btn-sm offset-5\" [ngClass]=\"{'btn-primary': !isFavoriteTab, 'btn-link': isFavoriteTab}\" type=\"button\">Results</button>\n    <button (click)=\"ShowFavoritesTab();\" class=\"btn btn-sm\" [ngClass]=\"{'btn-primary': isFavoriteTab, 'btn-link': !isFavoriteTab}\" type=\"button\">Favorites</button>\n  </div>\n\n  <div class=\"mat-elevation-z8\">\n    <table mat-table class=\"full-width-table\" [dataSource]=\"dataSource\" aria-label=\"Elements\">\n      <!-- index Column -->\n      <ng-container matColumnDef=\"index\">\n          <th mat-header-cell *matHeaderCellDef>#</th>\n          <td mat-cell *matCellDef=\"let row; let i = index;\">{{i+1}}</td>\n      </ng-container>\n      <!-- date Column -->\n      <ng-container matColumnDef=\"date\">\n        <th mat-header-cell *matHeaderCellDef>Date</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.date}}</td>\n      </ng-container>\n      <!-- event Column -->\n      <ng-container matColumnDef=\"event\">\n        <th mat-header-cell *matHeaderCellDef>Event</th>\n        <td matTooltip=\"{{row.event}}\" mat-cell *matCellDef=\"let row\">\n          <div class=\"blue\" role=\"button\" (click)=\"ShowEventDetails(row.id)\">{{row.event}}</div>\n          \n        </td>\n      </ng-container>\n      <!-- category Column -->\n      <ng-container matColumnDef=\"category\">\n        <th mat-header-cell *matHeaderCellDef>Category</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.category}}</td>\n      </ng-container>\n      <!-- venueInfo Column -->\n      <ng-container matColumnDef=\"venueInfo\">\n        <th mat-header-cell *matHeaderCellDef>Venue Info</th>\n        <td mat-cell *matCellDef=\"let row\">{{row.venueInfo}}</td>\n      </ng-container>\n      <!-- favorite Column -->\n      <ng-container matColumnDef=\"favorite\">\n        <th mat-header-cell *matHeaderCellDef>Favorite</th>\n        <td mat-cell *matCellDef=\"let row\">\n          <button (click)= \"Favorited(row, $event);\" class=\"starButton\" type=\"button\">\n            <i class=\"material-icons starBorder\" [hidden]=\"!isFavoriteTab\">delete</i>\n            <i class=\"material-icons starBorder\" [hidden]=\"isFavoriteTab || isFav(row)\">star_border</i>\n            <i class=\"material-icons star\" [hidden]=\"isFavoriteTab || !isFav(row)\">star</i>\n          </button>\n        </td>\n      </ng-container>\n\n\n\n      <tr mat-header-row  *matHeaderRowDef=\"displayedColumns\"></tr>\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns; let i = index;\"></tr>\n    </table>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -177,26 +178,15 @@ module.exports = "<div class=\"container\">\n  <div class=\"mat-elevation-z8\">\
 /*!************************************************************!*\
   !*** ./src/app/search-results/search-results.component.ts ***!
   \************************************************************/
-/*! exports provided: SearchResultsComponent, SearchResultsDataSource */
+/*! exports provided: SearchResultsComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchResultsComponent", function() { return SearchResultsComponent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchResultsDataSource", function() { return SearchResultsDataSource; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_cdk_collections__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/cdk/collections */ "./node_modules/@angular/cdk/esm5/collections.es5.js");
-/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -210,12 +200,49 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var SearchResultsComponent = /** @class */ (function () {
-    function SearchResultsComponent(servicesService) {
-        this.servicesService = servicesService;
-        this.displayedColumns = ['id', 'date', 'event', 'category', 'venueInfo', 'favorite'];
+    function SearchResultsComponent(service) {
+        this.service = service;
+        this.favorites = [];
+        this.favoritesSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.isFavoriteTab = false;
+        this.displayedColumns = ['index', 'date', 'event', 'category', 'venueInfo', 'favorite'];
     }
     SearchResultsComponent.prototype.ngOnInit = function () {
-        this.dataSource = new SearchResultsDataSource(this.servicesService.searchResultsObserver);
+        // this.dataSource=results;//for testing
+        this.dataSource = this.service.searchResultsObserver; //for server
+        this.favoriteSource = this.favoritesSubject.asObservable();
+        this.resultsSource = this.dataSource;
+    };
+    SearchResultsComponent.prototype.Favorited = function (row, event) {
+        var index = this.isFav(row);
+        if (index) { //unfavorited
+            this.favorites.splice(index - 1, 1);
+        }
+        else { //favorited
+            this.favorites.push(row);
+        }
+        this.favoritesSubject.next(this.favorites);
+    };
+    SearchResultsComponent.prototype.isFav = function (row) {
+        for (var i = 0; i < this.favorites.length; i++) {
+            if (this.favorites[i] == row) {
+                return i + 1;
+            }
+        }
+        return 0;
+    };
+    SearchResultsComponent.prototype.ShowResultsTab = function () {
+        this.isFavoriteTab = false;
+        this.dataSource = this.resultsSource;
+    };
+    SearchResultsComponent.prototype.ShowFavoritesTab = function () {
+        this.isFavoriteTab = true;
+        this.dataSource = this.favoriteSource;
+    };
+    SearchResultsComponent.prototype.ShowEventDetails = function (id) {
+        var details = this.service.GetEventDetails(id);
+        console.log(details);
+        // console.log(id);
     };
     SearchResultsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -223,25 +250,16 @@ var SearchResultsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./search-results.component.html */ "./src/app/search-results/search-results.component.html"),
             styles: [__webpack_require__(/*! ./search-results.component.css */ "./src/app/search-results/search-results.component.css")],
         }),
-        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_2__["ServicesService"]])
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
     ], SearchResultsComponent);
     return SearchResultsComponent;
 }());
 
-var SearchResultsDataSource = /** @class */ (function (_super) {
-    __extends(SearchResultsDataSource, _super);
-    function SearchResultsDataSource(observer) {
-        var _this = _super.call(this) || this;
-        _this.observer = observer;
-        return _this;
-    }
-    SearchResultsDataSource.prototype.connect = function () {
-        return this.observer;
-    };
-    SearchResultsDataSource.prototype.disconnect = function () { };
-    return SearchResultsDataSource;
-}(_angular_cdk_collections__WEBPACK_IMPORTED_MODULE_1__["DataSource"]));
-
+var results = [
+    { id: "1234ABCD", date: "10-5-2014", event: "sex on beach", category: "nsfw", venueInfo: "idk" },
+    { id: "1233ABCD", date: "10-5-2015", event: "sex on beach", category: "nsfw", venueInfo: "idk" },
+    { id: "2344ABCD", date: "10-5-2016", event: "sex on beach", category: "nsfw", venueInfo: "idk" },
+];
 
 
 /***/ }),
@@ -430,20 +448,51 @@ var ServicesService = /** @class */ (function () {
             var arr = temp.json();
             var results = [];
             for (var i = 0; i < arr.length; i++) {
-                results.push({ date: arr[i]['dates']['start']['localDate'],
+                results.push({
+                    id: arr[i]['id'],
+                    date: arr[i]['dates']['start']['localDate'],
                     event: arr[i]['name'],
                     category: arr[i]['classifications'][0]['segment']['name'],
-                    venueInfo: arr[i]['_embedded']['venues'][0]['name'] });
+                    venueInfo: arr[i]['_embedded']['venues'][0]['name']
+                });
             }
             results.sort(function (a, b) {
                 return new Date(a.date).getTime() - new Date(b.date).getTime();
             });
-            for (var i = 0; i < results.length; i++) {
-                results[i]['id'] = i + 1;
-                results[i]['favorite'] = 'X';
-            }
+            // for (let i=0;i<results.length;i++){
+            //   results[i]['id']=i+1;
+            //   results[i]['favorite']='X';
+            // }
             _this.searchResultsSubject.next(results);
         });
+    };
+    ServicesService.prototype.GetEventDetails = function (id) {
+        var results = {};
+        this.http.get('api/eventdetails?id=' + id).subscribe(function (temp) {
+            var arr = temp.json();
+            results = {
+                artists: [],
+                venue: arr['_embedded']['venues'][0]['name'],
+                date: arr['dates']['start']['localDate'],
+                time: arr['dates']['start']['localTime'],
+                category: [arr['classifications'][0]['segment']['name'],
+                    arr['classifications'][0]['genre']['name']],
+                ticketStatus: arr['dates']['status']['code'],
+                buyTicketAt: arr['url'],
+                seatMap: arr['seatmap']['staticUrl']
+            };
+            if (arr['priceRanges'] != null) {
+                results['priceRange'] = [arr['priceRanges'][0]['min'],
+                    arr['priceRanges'][0]['max']];
+            }
+            for (var i = 0; i < arr['_embedded']['attractions'].length; i++) {
+                results['artists'].push(arr['_embedded']['attractions'][i]['name']);
+            }
+            console.log(results);
+            // console.log(temp);
+        });
+        console.log(results);
+        return results;
     };
     ServicesService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

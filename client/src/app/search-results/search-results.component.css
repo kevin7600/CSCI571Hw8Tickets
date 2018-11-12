@@ -1,3 +1,17 @@
 .full-width-table {
   width: 100%;
 }
+
+.star{
+  color: #e5c600;
+}
+.starBorder{
+  color: black; 
+}
+.starButton{
+  background-color:white;
+}
+
+.blue{
+  color:#3a47ff;
+}

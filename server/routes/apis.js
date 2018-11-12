@@ -18,6 +18,16 @@ router.get('/autocomplete/:keyword',function(req, res, next){
         }).pipe(res);
 });
 
+router.get('/eventdetails/',function(req,res,next){
+    const TicketAPI='https://app.ticketmaster.com/discovery/v2/events/'+req.query.id+
+    '?apikey='+ticketmasterKey;
+    console.log(TicketAPI);
+    request.get({url: TicketAPI,json:true},
+        function(err,response,body){
+            res.json(body);
+        });
+});
+
 router.get('/searchresults/',function(req,res,next){
     console.log(req.query);
     if (req.query.otherLocationTextDisabled=="false"){
@@ -125,6 +135,8 @@ router.get('/searchresults/',function(req,res,next){
     }
     
 });
+
+
 
 // //get single api
 // router.get('/apis/:id',function(req, res, next){
