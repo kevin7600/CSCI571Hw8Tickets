@@ -1,21 +1,21 @@
 <div class="container">
     <mat-list role="list">
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!artist">
           <div class="col-2 bold">Artist/Team(s)</div>
           <div class="offset-2">{{artist}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!venue">
           <div class="col-2 bold">Venue</div>
           <div class="offset-2">{{venue}}</div>
       </mat-list-item>
       
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!time">
           <div class="col-2 bold">Time</div>
           <div class="offset-2">{{time}}</div>
       </mat-list-item>
       
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!category">
           <div class="col-2 bold">Category</div>
           <div class="offset-2">{{category}}</div>
       </mat-list-item>
@@ -25,17 +25,17 @@
           <div class="offset-2">{{priceRange}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!ticketStatus">
           <div class="col-2 bold">Ticket Status</div>
           <div class="offset-2">{{ticketStatus}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!buyTicketAt">
           <div class="col-2 bold">Buy Ticket At</div>
           <div class="offset-2"><a target="_blank" href='{{buyTicketAt}}'>Ticketmaster</a></div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem">
+      <mat-list-item class="row" role="listitem" [hidden]="!seatMap">
           <div class="col-2 bold">Seat Map</div>
           <div class="blue offset-2" role="button" (click)="ShowSeatmap()">View Seat Map Here</div>
 

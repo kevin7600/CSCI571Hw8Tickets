@@ -3,11 +3,43 @@ var router = express.Router();
 var mongojs = require('mongojs');
 var request=require('request');
 var geohash = require('ngeohash');
-
+var SpotifyWebApi = require('spotify-web-api-node');
 var db = mongojs('mongodb://kevin:kirbyex7600@ds157923.mlab.com:57923/mytasklist', ['tasks'])
 //Get all apis
 const ticketmasterKey='WUZpipDRqIHiV8jTieLC9mWxEgPBz15c';
 const googleKey='AIzaSyDNUOKu86B3k1O0HL8rO2pSSUG1FJecQqw';
+var spotifyApi = new SpotifyWebApi({
+    clientId: '27c8a3ba4d6d4a1c9c22e3bc8ba77ce7',
+    clientSecret: '0acf787ad67e47c1a00ef6918af672d4',
+  });
+function SpotifyHelper(req, res){//keep requesting new token and request artist until works
+    console.log("in spotify:");
+    spotifyApi.searchArtists(req.query.artist)
+        .then(function(data){
+            //return the artist that matches the search keyword
+            let arr=data.body['artists']['items'];
+            for (let i=0;i<arr.length;i++){
+                if (arr[i]['name'].toLowerCase()==req.query.artist.toLowerCase()){
+                    res.json(arr[i]);
+                    return;
+                }
+            }
+            res.json({});//if we get here, artist isn't found
+        }, function(err){
+            console.log("failed.. geting another token");
+            spotifyApi.clientCredentialsGrant().then(
+                function(data) {
+                    spotifyApi.setAccessToken(data.body['access_token']);
+                    SpotifyHelper(req,res);
+                }
+            );
+        });
+}
+router.get('/spotify/',function(req,res,next){//calls helper function above
+    SpotifyHelper(req,res);
+});
+
+
 router.get('/autocomplete/:keyword',function(req, res, next){
     const TicketAPIKey='https://app.ticketmaster.com/discovery/v2/suggest?apikey='+ticketmasterKey+'&keyword=';
     request.get({url: TicketAPIKey+req.params.keyword,json: true},
@@ -29,7 +61,6 @@ router.get('/eventdetails/',function(req,res,next){
 });
 
 router.get('/searchresults/',function(req,res,next){
-    console.log(req.query);
     if (req.query.otherLocationTextDisabled=="false"){
         const googleGeocodeAPI='https://maps.googleapis.com/maps/api/geocode/json?address='+req.query.otherLocationKeywords+'&key='+googleKey;
         request.get({url:googleGeocodeAPI,json:true},

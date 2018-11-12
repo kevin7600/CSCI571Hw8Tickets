@@ -92,9 +92,9 @@ export class SeatMapDialog{
     public dialogRef: MatDialogRef<SeatMapDialog>,
     @Inject(MAT_DIALOG_DATA) public data){
       this.myURL=data;
-      // console.log(this.myURL);
 
     }
+
     Close(){
       this.dialogRef.close();
     }

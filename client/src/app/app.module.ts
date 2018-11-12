@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import { TabEventComponent, SeatMapDialog } from './event-details/tab-event/tab-event.component';
+import { TabArtistComponent } from './event-details/tab-artist/tab-artist.component';
+import {RoundProgressModule} from 'angular-svg-round-progressbar';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,7 @@ import { TabEventComponent, SeatMapDialog } from './event-details/tab-event/tab-
     EventDetailsComponent,
     TabEventComponent,
     SeatMapDialog,
+    TabArtistComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,8 @@ import { TabEventComponent, SeatMapDialog } from './event-details/tab-event/tab-
     MatTooltipModule,
     MatTabsModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    RoundProgressModule
 
   ],
   providers: [],

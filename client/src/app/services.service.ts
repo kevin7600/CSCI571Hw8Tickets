@@ -16,6 +16,9 @@ export class ServicesService {
   eventDetailsSubject= new BehaviorSubject({});
   eventDetailsObserver=this.eventDetailsSubject.asObservable();
 
+  artistDetailsSubject= new BehaviorSubject({});
+  artistDetailsObserver=this.artistDetailsSubject.asObservable();
+
   constructor(private http:Http) { 
     console.log("services initialized");
   }
@@ -85,8 +88,10 @@ export class ServicesService {
   }
 
   GetEventDetails(id:string){
+    //TODO, reset all data
+    this.artistDetailsSubject.next({});//resets artists
     var results={};
-    this.http.get('api/eventdetails?id='+id).subscribe(temp=>{
+    this.http.get('api/eventdetails?id='+id).subscribe(temp=>{//gets all details
       let arr=temp.json();
       results={
         artists: [],
@@ -107,9 +112,24 @@ export class ServicesService {
       for (let i=0;i<arr['_embedded']['attractions'].length;i++){
         results['artists'].push(arr['_embedded']['attractions'][i]['name']);
       }
-      console.log(results);
       this.eventDetailsSubject.next(results);
       this.view=1;//swap to eventDetails Component
+      for (let i=0;i<results['category'].length;i++){//if it's details of music, then get artist info on spotify
+        if (results['category'][i].toLowerCase()=='music'){
+          this.http.get('api/spotify?artist='+results['artists'][0]).subscribe(temp=>{
+            let data=temp.json();
+            let artistResults={
+              name: data['name'],
+              followers: data['followers']['total'],
+              popularity: data['popularity'],
+              checkAt: data['external_urls']['spotify']
+            };
+            this.artistDetailsSubject.next(artistResults);
+          })
+        }
+      }
+
     });
+
   }
 }

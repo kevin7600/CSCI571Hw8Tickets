@@ -111,12 +111,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _search_results_search_results_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./search-results/search-results.component */ "./src/app/search-results/search-results.component.ts");
 /* harmony import */ var _event_details_event_details_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./event-details/event-details.component */ "./src/app/event-details/event-details.component.ts");
 /* harmony import */ var _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./event-details/tab-event/tab-event.component */ "./src/app/event-details/tab-event/tab-event.component.ts");
+/* harmony import */ var _event_details_tab_artist_tab_artist_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./event-details/tab-artist/tab-artist.component */ "./src/app/event-details/tab-artist/tab-artist.component.ts");
+/* harmony import */ var angular_svg_round_progressbar__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! angular-svg-round-progressbar */ "./node_modules/angular-svg-round-progressbar/dist/index.js");
+/* harmony import */ var angular_svg_round_progressbar__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(angular_svg_round_progressbar__WEBPACK_IMPORTED_MODULE_12__);
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -140,6 +145,7 @@ var AppModule = /** @class */ (function () {
                 _event_details_event_details_component__WEBPACK_IMPORTED_MODULE_9__["EventDetailsComponent"],
                 _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["TabEventComponent"],
                 _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["SeatMapDialog"],
+                _event_details_tab_artist_tab_artist_component__WEBPACK_IMPORTED_MODULE_11__["TabArtistComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -156,7 +162,8 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTooltipModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTabsModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatListModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatDialogModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatDialogModule"],
+                angular_svg_round_progressbar__WEBPACK_IMPORTED_MODULE_12__["RoundProgressModule"]
             ],
             providers: [],
             entryComponents: [_event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["SeatMapDialog"]],
@@ -188,7 +195,7 @@ module.exports = "mat-tab-group{\r\n}\r\n\r\n.backButton{\r\n    border: 1px sol
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <button class=\"btn btn-light btn-sm backButton\"  (click)=\"ShowSearchResults()\">\n    &lt; List\n  </button>\n  <mat-tab-group mat-align-tabs=\"end\" class=\"row\">\n    <mat-tab label=\"Event\"><app-tab-event></app-tab-event></mat-tab>\n    <mat-tab label=\"Artist/Teams\">sexyes</mat-tab>\n    <mat-tab label=\"Venue\">sexno</mat-tab>\n    <mat-tab label=\"Upcoming Events\">sexsexsex</mat-tab>\n  </mat-tab-group>\n</div>"
+module.exports = "<div class=\"container\">\n  <button class=\"btn btn-light btn-sm backButton\"  (click)=\"ShowSearchResults()\">\n    &lt; List\n  </button>\n  <mat-tab-group mat-align-tabs=\"end\" class=\"row\">\n    <mat-tab label=\"Event\"><app-tab-event></app-tab-event></mat-tab>\n    <mat-tab label=\"Artist/Teams\"><app-tab-artist></app-tab-artist></mat-tab>\n    <mat-tab label=\"Venue\">sexno</mat-tab>\n    <mat-tab label=\"Upcoming Events\">sexsexsex</mat-tab>\n  </mat-tab-group>\n</div>"
 
 /***/ }),
 
@@ -239,6 +246,76 @@ var EventDetailsComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/event-details/tab-artist/tab-artist.component.css":
+/*!*******************************************************************!*\
+  !*** ./src/app/event-details/tab-artist/tab-artist.component.css ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n.heading{\r\n    padding:0;\r\n}\r\n\r\n.headingText{\r\n    font-size: 15;\r\n    font-weight:bold;\r\n}\r\n\r\n.popularityNum{\r\n    position:absolute;\r\n    bottom: 12px;\r\n    left: 563px;    \r\n}"
+
+/***/ }),
+
+/***/ "./src/app/event-details/tab-artist/tab-artist.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/event-details/tab-artist/tab-artist.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row heading\" role=\"listitem\">\n          <div class=\"headingText offset-6\">{{artistData.name}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-4 bold\">Name</div>\n          <div class=\"offset-2\">{{artistData.name}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-4 bold\">Followers</div>\n          <div class=\"offset-2\">{{artistData.followers}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-4 bold\">Popularity</div>\n          <div class=\"offset-2\">\n            <div class=\"popularityNum\">{{artistData.popularity}}</div> \n            <round-progress [current]=\"artistData.popularity\" [max]=\"100\" [color]=\"'#a3ff72'\" \n            [stroke]=\"3\" [radius]=\"17\" [clockwise]=\"false\">\n            </round-progress>\n\n          </div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-4 bold\">Check At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{artistData.checkAt}}'>Spotify</a></div>\n      </mat-list-item>\n    </mat-list>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/event-details/tab-artist/tab-artist.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/event-details/tab-artist/tab-artist.component.ts ***!
+  \******************************************************************/
+/*! exports provided: TabArtistComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabArtistComponent", function() { return TabArtistComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services.service */ "./src/app/services.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TabArtistComponent = /** @class */ (function () {
+    function TabArtistComponent(service) {
+        var _this = this;
+        this.service = service;
+        this.artistData = {};
+        this.service.artistDetailsObserver.subscribe(function (temp) {
+            _this.artistData = temp;
+            console.log(_this.artistData);
+        });
+    }
+    TabArtistComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-tab-artist',
+            template: __webpack_require__(/*! ./tab-artist.component.html */ "./src/app/event-details/tab-artist/tab-artist.component.html"),
+            styles: [__webpack_require__(/*! ./tab-artist.component.css */ "./src/app/event-details/tab-artist/tab-artist.component.css")]
+        }),
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
+    ], TabArtistComponent);
+    return TabArtistComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/event-details/tab-event/seatMap.html":
 /*!******************************************************!*\
   !*** ./src/app/event-details/tab-event/seatMap.html ***!
@@ -257,7 +334,7 @@ module.exports = "<div class=\"container\">\r\n    <h1>View Seat Map</h1>\r\n   
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n.bold{\r\n    font-weight: bold;\r\n}\r\n\r\n.blue{\r\n    color:#0068d1;\r\n}"
+module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n"
 
 /***/ }),
 
@@ -268,7 +345,7 @@ module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Artist/Team(s)</div>\n          <div class=\"offset-2\">{{artist}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Venue</div>\n          <div class=\"offset-2\">{{venue}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Time</div>\n          <div class=\"offset-2\">{{time}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Category</div>\n          <div class=\"offset-2\">{{category}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!priceRange\">\n          <div class=\"col-2 bold\">Price Range</div>\n          <div class=\"offset-2\">{{priceRange}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Ticket Status</div>\n          <div class=\"offset-2\">{{ticketStatus}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Buy Ticket At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{buyTicketAt}}'>Ticketmaster</a></div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Seat Map</div>\n          <div class=\"blue offset-2\" role=\"button\" (click)=\"ShowSeatmap()\">View Seat Map Here</div>\n\n      </mat-list-item>\n    </mat-list>\n</div>"
+module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!artist\">\n          <div class=\"col-2 bold\">Artist/Team(s)</div>\n          <div class=\"offset-2\">{{artist}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!venue\">\n          <div class=\"col-2 bold\">Venue</div>\n          <div class=\"offset-2\">{{venue}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!time\">\n          <div class=\"col-2 bold\">Time</div>\n          <div class=\"offset-2\">{{time}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!category\">\n          <div class=\"col-2 bold\">Category</div>\n          <div class=\"offset-2\">{{category}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!priceRange\">\n          <div class=\"col-2 bold\">Price Range</div>\n          <div class=\"offset-2\">{{priceRange}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!ticketStatus\">\n          <div class=\"col-2 bold\">Ticket Status</div>\n          <div class=\"offset-2\">{{ticketStatus}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!buyTicketAt\">\n          <div class=\"col-2 bold\">Buy Ticket At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{buyTicketAt}}'>Ticketmaster</a></div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!seatMap\">\n          <div class=\"col-2 bold\">Seat Map</div>\n          <div class=\"blue offset-2\" role=\"button\" (click)=\"ShowSeatmap()\">View Seat Map Here</div>\n\n      </mat-list-item>\n    </mat-list>\n</div>"
 
 /***/ }),
 
@@ -391,7 +468,6 @@ var SeatMapDialog = /** @class */ (function () {
         this.data = data;
         this.myURL = "";
         this.myURL = data;
-        // console.log(this.myURL);
     }
     SeatMapDialog.prototype.Close = function () {
         this.dialogRef.close();
@@ -418,7 +494,7 @@ var SeatMapDialog = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".full-width-table {\n  width: 100%;\n}\n\n.star{\n  color: #e5c600;\n}\n\n.starBorder{\n  color: black; \n}\n\n.starButton{\n  background-color:white;\n}\n\n.blue{\n  color:#0068d1;\n}"
+module.exports = ".full-width-table {\n  width: 100%;\n}\n\n.star{\n  color: #e5c600;\n}\n\n.starBorder{\n  color: black; \n}\n\n.starButton{\n  background-color:white;\n}\n"
 
 /***/ }),
 
@@ -664,6 +740,8 @@ var ServicesService = /** @class */ (function () {
         this.searchResultsObserver = this.searchResultsSubject.asObservable(); //this is the current value we see
         this.eventDetailsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]({});
         this.eventDetailsObserver = this.eventDetailsSubject.asObservable();
+        this.artistDetailsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]({});
+        this.artistDetailsObserver = this.artistDetailsSubject.asObservable();
         this.AutComCount = 0; //so newer auto complete requests will overwrite previous requests
         this.view = 0; //0=searchResults, 1=eventDetails
         console.log("services initialized");
@@ -729,6 +807,7 @@ var ServicesService = /** @class */ (function () {
     };
     ServicesService.prototype.GetEventDetails = function (id) {
         var _this = this;
+        //TODO, reset all data
         var results = {};
         this.http.get('api/eventdetails?id=' + id).subscribe(function (temp) {
             var arr = temp.json();
@@ -750,9 +829,22 @@ var ServicesService = /** @class */ (function () {
             for (var i = 0; i < arr['_embedded']['attractions'].length; i++) {
                 results['artists'].push(arr['_embedded']['attractions'][i]['name']);
             }
-            console.log(results);
             _this.eventDetailsSubject.next(results);
             _this.view = 1; //swap to eventDetails Component
+            for (var i = 0; i < results['category'].length; i++) { //if it's details of music, then get artist info on spotify
+                if (results['category'][i].toLowerCase() == 'music') {
+                    _this.http.get('api/spotify?artist=' + results['artists'][0]).subscribe(function (temp) {
+                        var data = temp.json();
+                        var artistResults = {
+                            name: data['name'],
+                            followers: data['followers']['total'],
+                            popularity: data['popularity'],
+                            checkAt: data['external_urls']['spotify']
+                        };
+                        _this.artistDetailsSubject.next(artistResults);
+                    });
+                }
+            }
         });
     };
     ServicesService = __decorate([
