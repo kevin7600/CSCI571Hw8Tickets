@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs';
 import {ServicesService} from '../services.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -57,8 +55,7 @@ export class SearchResultsComponent implements OnInit {
     this.dataSource=this.favoriteSource;
   }
   ShowEventDetails(id){
-    let details=this.service.GetEventDetails(id);
-    console.log(details);
+    this.service.GetEventDetails(id);
     // console.log(id);
   }
 }

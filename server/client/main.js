@@ -41,7 +41,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-search></app-search>\r\n<app-search-results></app-search-results>"
+module.exports = "<app-search></app-search>\r\n<app-search-results [hidden]=\"service.view!=0\"></app-search-results>\r\n<app-event-details [hidden]=\"service.view!=1\"></app-event-details>"
 
 /***/ }),
 
@@ -63,18 +63,25 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent() {
+    function AppComponent(service) {
+        this.service = service;
     }
+    AppComponent.prototype.test = function () {
+    };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")],
             providers: [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]]
-        })
+        }),
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -102,12 +109,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./search/search.component */ "./src/app/search/search.component.ts");
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
 /* harmony import */ var _search_results_search_results_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./search-results/search-results.component */ "./src/app/search-results/search-results.component.ts");
+/* harmony import */ var _event_details_event_details_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./event-details/event-details.component */ "./src/app/event-details/event-details.component.ts");
+/* harmony import */ var _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./event-details/tab-event/tab-event.component */ "./src/app/event-details/tab-event/tab-event.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -126,6 +137,8 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
                 _search_search_component__WEBPACK_IMPORTED_MODULE_6__["SearchComponent"],
                 _search_results_search_results_component__WEBPACK_IMPORTED_MODULE_8__["SearchResultsComponent"],
+                _event_details_event_details_component__WEBPACK_IMPORTED_MODULE_9__["EventDetailsComponent"],
+                _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["TabEventComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -139,13 +152,212 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatPaginatorModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSortModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTooltipModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTooltipModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTabsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatListModule"]
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/event-details/event-details.component.css":
+/*!***********************************************************!*\
+  !*** ./src/app/event-details/event-details.component.css ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "mat-tab-group{\r\n}\r\n\r\n.backButton{\r\n    border: 1px solid #aeaeae;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/event-details/event-details.component.html":
+/*!************************************************************!*\
+  !*** ./src/app/event-details/event-details.component.html ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <button class=\"btn btn-light btn-sm backButton\"  (click)=\"ShowSearchResults()\">\n    &lt; List\n  </button>\n  <mat-tab-group mat-align-tabs=\"end\" class=\"row\">\n    <mat-tab label=\"Event\"><app-tab-event></app-tab-event></mat-tab>\n    <mat-tab label=\"Artist/Teams\">sexyes</mat-tab>\n    <mat-tab label=\"Venue\">sexno</mat-tab>\n    <mat-tab label=\"Upcoming Events\">sexsexsex</mat-tab>\n  </mat-tab-group>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/event-details/event-details.component.ts":
+/*!**********************************************************!*\
+  !*** ./src/app/event-details/event-details.component.ts ***!
+  \**********************************************************/
+/*! exports provided: EventDetailsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventDetailsComponent", function() { return EventDetailsComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services.service */ "./src/app/services.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var EventDetailsComponent = /** @class */ (function () {
+    function EventDetailsComponent(service) {
+        this.service = service;
+    }
+    EventDetailsComponent.prototype.ngOnInit = function () {
+    };
+    EventDetailsComponent.prototype.ShowSearchResults = function () {
+        this.service.view = 0;
+    };
+    EventDetailsComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-event-details',
+            template: __webpack_require__(/*! ./event-details.component.html */ "./src/app/event-details/event-details.component.html"),
+            styles: [__webpack_require__(/*! ./event-details.component.css */ "./src/app/event-details/event-details.component.css")]
+        }),
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
+    ], EventDetailsComponent);
+    return EventDetailsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/event-details/tab-event/tab-event.component.css":
+/*!*****************************************************************!*\
+  !*** ./src/app/event-details/tab-event/tab-event.component.css ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n.bold{\r\n    font-weight: bold;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/event-details/tab-event/tab-event.component.html":
+/*!******************************************************************!*\
+  !*** ./src/app/event-details/tab-event/tab-event.component.html ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Artist/Team(s)</div>\n          <div class=\"offset-2\">{{artist}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Venue</div>\n          <div class=\"offset-2\">{{venue}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Time</div>\n          <div class=\"offset-2\">{{time}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Category</div>\n          <div class=\"offset-2\">{{category}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!priceRange\">\n          <div class=\"col-2 bold\">Price Range</div>\n          <div class=\"offset-2\">{{priceRange}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Ticket Status</div>\n          <div class=\"offset-2\">{{ticketStatus}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Buy Ticket At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{buyTicketAt}}'>Ticketmaster</a></div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Seat Map</div>\n          <div class=\"offset-2\">{{seatMap}}</div>\n      </mat-list-item>\n    </mat-list>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/event-details/tab-event/tab-event.component.ts":
+/*!****************************************************************!*\
+  !*** ./src/app/event-details/tab-event/tab-event.component.ts ***!
+  \****************************************************************/
+/*! exports provided: TabEventComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabEventComponent", function() { return TabEventComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services.service */ "./src/app/services.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TabEventComponent = /** @class */ (function () {
+    function TabEventComponent(service) {
+        this.service = service;
+        this.artist = "";
+        this.venue = "";
+        this.time = "";
+        this.category = "";
+        this.priceRange = "";
+        this.ticketStatus = "";
+        this.buyTicketAt = "";
+        this.seatMap = "";
+        this.showTab = false;
+    }
+    TabEventComponent.prototype.Reset = function () {
+        this.artist = "";
+        this.venue = "";
+        this.time = "";
+        this.category = "";
+        this.priceRange = "";
+        this.ticketStatus = "";
+        this.buyTicketAt = "";
+        this.seatMap = "";
+    };
+    TabEventComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.service.eventDetailsObserver.subscribe(function (temp) {
+            _this.Reset();
+            if (temp['artists']) {
+                for (var i = 0; i < temp['artists'].length; i++) {
+                    _this.artist += temp['artists'][i];
+                    if (i != temp['artists'].length - 1) {
+                        _this.artist += ' | ';
+                    }
+                }
+            }
+            if (temp['venue']) {
+                _this.venue = temp['venue'];
+            }
+            if (temp['date']) {
+                _this.time += temp['date'] + "  ";
+            }
+            if (temp['time']) {
+                _this.time += temp['time'];
+            }
+            if (temp['category']) {
+                for (var i = 0; i < temp['category'].length; i++) {
+                    _this.category += temp['category'][i];
+                    if (i != temp['category'].length - 1) {
+                        _this.category += ' | ';
+                    }
+                }
+            }
+            if (temp['priceRange']) {
+                _this.priceRange = "$" + temp['priceRange'][0] + " ~ $" + temp['priceRange'][1];
+            }
+            if (temp['ticketStatus']) {
+                _this.ticketStatus += temp['ticketStatus'];
+            }
+            if (temp['buyTicketAt']) {
+                _this.buyTicketAt += temp['buyTicketAt'];
+            }
+            if (temp['seatMap']) {
+                _this.seatMap += temp['seatMap'];
+            }
+            console.log(_this.seatMap);
+        });
+        this.showTab = true;
+    };
+    TabEventComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-tab-event',
+            template: __webpack_require__(/*! ./tab-event.component.html */ "./src/app/event-details/tab-event/tab-event.component.html"),
+            styles: [__webpack_require__(/*! ./tab-event.component.css */ "./src/app/event-details/tab-event/tab-event.component.css")]
+        }),
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
+    ], TabEventComponent);
+    return TabEventComponent;
 }());
 
 
@@ -240,8 +452,7 @@ var SearchResultsComponent = /** @class */ (function () {
         this.dataSource = this.favoriteSource;
     };
     SearchResultsComponent.prototype.ShowEventDetails = function (id) {
-        var details = this.service.GetEventDetails(id);
-        console.log(details);
+        this.service.GetEventDetails(id);
         // console.log(id);
     };
     SearchResultsComponent = __decorate([
@@ -404,7 +615,10 @@ var ServicesService = /** @class */ (function () {
         this.http = http;
         this.searchResultsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]); //after clicking "search" this is populated with next value
         this.searchResultsObserver = this.searchResultsSubject.asObservable(); //this is the current value we see
+        this.eventDetailsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]({});
+        this.eventDetailsObserver = this.eventDetailsSubject.asObservable();
         this.AutComCount = 0; //so newer auto complete requests will overwrite previous requests
+        this.view = 0; //0=searchResults, 1=eventDetails
         console.log("services initialized");
     }
     ServicesService.prototype.sendAutoCompleteRequest = function (keyword) {
@@ -467,6 +681,7 @@ var ServicesService = /** @class */ (function () {
         });
     };
     ServicesService.prototype.GetEventDetails = function (id) {
+        var _this = this;
         var results = {};
         this.http.get('api/eventdetails?id=' + id).subscribe(function (temp) {
             var arr = temp.json();
@@ -489,10 +704,9 @@ var ServicesService = /** @class */ (function () {
                 results['artists'].push(arr['_embedded']['attractions'][i]['name']);
             }
             console.log(results);
-            // console.log(temp);
+            _this.eventDetailsSubject.next(results);
+            _this.view = 1; //swap to eventDetails Component
         });
-        console.log(results);
-        return results;
     };
     ServicesService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({

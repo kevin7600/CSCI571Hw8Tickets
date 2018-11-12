@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ServicesService} from '../services.service';
 
 @Component({
   selector: 'app-event-details',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventDetailsComponent implements OnInit {
 
-  constructor() { }
+  constructor(public service:ServicesService) { }
 
   ngOnInit() {
   }
-
+  ShowSearchResults(){
+    this.service.view=0;
+  }
 }

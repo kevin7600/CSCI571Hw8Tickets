@@ -8,5 +8,7 @@ import {ServicesService} from './services.service';
   providers:[ServicesService]
 })
 export class AppComponent {
-  
+  constructor(public service:ServicesService){}
+  test(){
+  }
 }

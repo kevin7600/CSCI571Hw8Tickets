@@ -2,16 +2,26 @@ import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
 import { ArrayType } from '@angular/compiler';
+import { SearchResultsComponent } from './search-results/search-results.component';
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesService {
+
+  
+
   searchResultsSubject= new BehaviorSubject([]);//after clicking "search" this is populated with next value
   searchResultsObserver=this.searchResultsSubject.asObservable();//this is the current value we see
+  
+  eventDetailsSubject= new BehaviorSubject({});
+  eventDetailsObserver=this.eventDetailsSubject.asObservable();
+
   constructor(private http:Http) { 
     console.log("services initialized");
   }
   AutComCount:number=0;//so newer auto complete requests will overwrite previous requests
+
+  view=0;//0=searchResults, 1=eventDetails
 
   sendAutoCompleteRequest(keyword:string): string[]{
     if (!keyword)return;//don't autocomplete when there isn't any keyword
@@ -98,9 +108,8 @@ export class ServicesService {
         results['artists'].push(arr['_embedded']['attractions'][i]['name']);
       }
       console.log(results);
-      // console.log(temp);
+      this.eventDetailsSubject.next(results);
+      this.view=1;//swap to eventDetails Component
     });
-    console.log(results);
-    return results;
   }
 }

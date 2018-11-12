@@ -1,2 +1,3 @@
 <app-search></app-search>
-<app-search-results></app-search-results>
+<app-search-results [hidden]="service.view!=0"></app-search-results>
+<app-event-details [hidden]="service.view!=1"></app-event-details>
