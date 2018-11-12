@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 import {ServicesService} from '../../services.service';
 @Component({
@@ -18,7 +19,7 @@ export class TabEventComponent implements OnInit {
   seatMap:string="";
 
   showTab:boolean=false;
-  constructor(private service:ServicesService) { }
+  constructor(private service:ServicesService,public dialog: MatDialog) { }
 
   Reset(){
     this.artist="";
@@ -71,9 +72,34 @@ export class TabEventComponent implements OnInit {
       if (temp['seatMap']){
         this.seatMap += temp['seatMap'];
       }
-      console.log(this.seatMap);
     });
     this.showTab=true;
   }
-
+  ShowSeatmap(){
+    const dialogRef = this.dialog.open(SeatMapDialog,{
+      data: this.seatMap
+    });
+  }
 }
+
+@Component({
+  selector: 'randomNameHere',
+  templateUrl: './seatMap.html',
+})
+export class SeatMapDialog{
+  myURL="";
+  constructor(
+    public dialogRef: MatDialogRef<SeatMapDialog>,
+    @Inject(MAT_DIALOG_DATA) public data){
+      this.myURL=data;
+      // console.log(this.myURL);
+
+    }
+    Close(){
+      this.dialogRef.close();
+    }
+}
+
+    
+  
+

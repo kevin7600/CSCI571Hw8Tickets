@@ -139,6 +139,7 @@ var AppModule = /** @class */ (function () {
                 _search_results_search_results_component__WEBPACK_IMPORTED_MODULE_8__["SearchResultsComponent"],
                 _event_details_event_details_component__WEBPACK_IMPORTED_MODULE_9__["EventDetailsComponent"],
                 _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["TabEventComponent"],
+                _event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["SeatMapDialog"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -154,9 +155,11 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSortModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTooltipModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTabsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatListModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatListModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatDialogModule"]
             ],
             providers: [],
+            entryComponents: [_event_details_tab_event_tab_event_component__WEBPACK_IMPORTED_MODULE_10__["SeatMapDialog"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
     ], AppModule);
@@ -236,6 +239,17 @@ var EventDetailsComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/event-details/tab-event/seatMap.html":
+/*!******************************************************!*\
+  !*** ./src/app/event-details/tab-event/seatMap.html ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\r\n    <h1>View Seat Map</h1>\r\n    <hr>\r\n    <a [href]=\"myURL\" target=\"_blank\"><img  [src]=\"myURL\"></a>\r\n    <hr>\r\n    <button style=\"float:right\" (click)=\"Close();\">Close</button>\r\n</div>"
+
+/***/ }),
+
 /***/ "./src/app/event-details/tab-event/tab-event.component.css":
 /*!*****************************************************************!*\
   !*** ./src/app/event-details/tab-event/tab-event.component.css ***!
@@ -243,7 +257,7 @@ var EventDetailsComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n.bold{\r\n    font-weight: bold;\r\n}"
+module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;\r\n}\r\n\r\n.bold{\r\n    font-weight: bold;\r\n}\r\n\r\n.blue{\r\n    color:#0068d1;\r\n}"
 
 /***/ }),
 
@@ -254,7 +268,7 @@ module.exports = "mat-list-item:nth-child(odd){\r\n    background-color:#f2f2f2;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Artist/Team(s)</div>\n          <div class=\"offset-2\">{{artist}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Venue</div>\n          <div class=\"offset-2\">{{venue}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Time</div>\n          <div class=\"offset-2\">{{time}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Category</div>\n          <div class=\"offset-2\">{{category}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!priceRange\">\n          <div class=\"col-2 bold\">Price Range</div>\n          <div class=\"offset-2\">{{priceRange}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Ticket Status</div>\n          <div class=\"offset-2\">{{ticketStatus}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Buy Ticket At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{buyTicketAt}}'>Ticketmaster</a></div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Seat Map</div>\n          <div class=\"offset-2\">{{seatMap}}</div>\n      </mat-list-item>\n    </mat-list>\n</div>"
+module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Artist/Team(s)</div>\n          <div class=\"offset-2\">{{artist}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Venue</div>\n          <div class=\"offset-2\">{{venue}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Time</div>\n          <div class=\"offset-2\">{{time}}</div>\n      </mat-list-item>\n      \n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Category</div>\n          <div class=\"offset-2\">{{category}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\" [hidden]=\"!priceRange\">\n          <div class=\"col-2 bold\">Price Range</div>\n          <div class=\"offset-2\">{{priceRange}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Ticket Status</div>\n          <div class=\"offset-2\">{{ticketStatus}}</div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Buy Ticket At</div>\n          <div class=\"offset-2\"><a target=\"_blank\" href='{{buyTicketAt}}'>Ticketmaster</a></div>\n      </mat-list-item>\n\n      <mat-list-item class=\"row\" role=\"listitem\">\n          <div class=\"col-2 bold\">Seat Map</div>\n          <div class=\"blue offset-2\" role=\"button\" (click)=\"ShowSeatmap()\">View Seat Map Here</div>\n\n      </mat-list-item>\n    </mat-list>\n</div>"
 
 /***/ }),
 
@@ -262,14 +276,16 @@ module.exports = "<div class=\"container\">\n    <mat-list role=\"list\">\n     
 /*!****************************************************************!*\
   !*** ./src/app/event-details/tab-event/tab-event.component.ts ***!
   \****************************************************************/
-/*! exports provided: TabEventComponent */
+/*! exports provided: TabEventComponent, SeatMapDialog */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabEventComponent", function() { return TabEventComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SeatMapDialog", function() { return SeatMapDialog; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services.service */ "./src/app/services.service.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services.service */ "./src/app/services.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -279,11 +295,16 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
 
 
 var TabEventComponent = /** @class */ (function () {
-    function TabEventComponent(service) {
+    function TabEventComponent(service, dialog) {
         this.service = service;
+        this.dialog = dialog;
         this.artist = "";
         this.venue = "";
         this.time = "";
@@ -345,9 +366,13 @@ var TabEventComponent = /** @class */ (function () {
             if (temp['seatMap']) {
                 _this.seatMap += temp['seatMap'];
             }
-            console.log(_this.seatMap);
         });
         this.showTab = true;
+    };
+    TabEventComponent.prototype.ShowSeatmap = function () {
+        var dialogRef = this.dialog.open(SeatMapDialog, {
+            data: this.seatMap
+        });
     };
     TabEventComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -355,9 +380,31 @@ var TabEventComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./tab-event.component.html */ "./src/app/event-details/tab-event/tab-event.component.html"),
             styles: [__webpack_require__(/*! ./tab-event.component.css */ "./src/app/event-details/tab-event/tab-event.component.css")]
         }),
-        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_1__["ServicesService"]])
+        __metadata("design:paramtypes", [_services_service__WEBPACK_IMPORTED_MODULE_2__["ServicesService"], _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialog"]])
     ], TabEventComponent);
     return TabEventComponent;
+}());
+
+var SeatMapDialog = /** @class */ (function () {
+    function SeatMapDialog(dialogRef, data) {
+        this.dialogRef = dialogRef;
+        this.data = data;
+        this.myURL = "";
+        this.myURL = data;
+        // console.log(this.myURL);
+    }
+    SeatMapDialog.prototype.Close = function () {
+        this.dialogRef.close();
+    };
+    SeatMapDialog = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'randomNameHere',
+            template: __webpack_require__(/*! ./seatMap.html */ "./src/app/event-details/tab-event/seatMap.html"),
+        }),
+        __param(1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MAT_DIALOG_DATA"])),
+        __metadata("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatDialogRef"], Object])
+    ], SeatMapDialog);
+    return SeatMapDialog;
 }());
 
 
@@ -371,7 +418,7 @@ var TabEventComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".full-width-table {\n  width: 100%;\n}\n\n.star{\n  color: #e5c600;\n}\n\n.starBorder{\n  color: black; \n}\n\n.starButton{\n  background-color:white;\n}\n\n.blue{\n  color:#3a47ff;\n}"
+module.exports = ".full-width-table {\n  width: 100%;\n}\n\n.star{\n  color: #e5c600;\n}\n\n.starBorder{\n  color: black; \n}\n\n.starButton{\n  background-color:white;\n}\n\n.blue{\n  color:#0068d1;\n}"
 
 /***/ }),
 
