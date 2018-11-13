@@ -16,7 +16,7 @@ export class ServicesService {
   eventDetailsSubject= new BehaviorSubject({});
   eventDetailsObserver=this.eventDetailsSubject.asObservable();
 
-  artistsDetailsSubject= new BehaviorSubject([]);
+  artistsDetailsSubject= new BehaviorSubject([{}]);
   artistsDetailsObserver=this.artistsDetailsSubject.asObservable();
   constructor(private http:Http) { 
     console.log("services initialized");
@@ -33,7 +33,7 @@ export class ServicesService {
 
     setTimeout(()=>{
       if (myAutoComCount==this.AutComCount){
-        this.http.get('api/autocomplete/'+keyword).subscribe(temp=>{
+        this.http.get('api/autocomplete/'+keyword).toPromise().then(temp=>{
           if (temp.json().hasOwnProperty("_embedded") && temp.json()["_embedded"].hasOwnProperty("attractions")){
             const arr=temp.json()["_embedded"]["attractions"];
             for (let i=0; i< arr.length;i++){
@@ -52,7 +52,7 @@ export class ServicesService {
 
   GetCurrentLocation(){
     let results={lat:-1, lon:-1};
-    this.http.get("http://ip-api.com/json").subscribe(temp=>{
+    this.http.get("http://ip-api.com/json").toPromise().then(temp=>{
       results['lat']=temp.json()['lat'];
       results['lon']=temp.json()['lon'];
     })
@@ -64,7 +64,7 @@ export class ServicesService {
     this.http.get('api/searchResults?keywords='+keywords+'&category='+category+'&distance='+distance
     +'&distanceUnits='+distanceUnits+'&otherLocationKeywords='+otherLocationKeywords
     +'&otherLocationTextDisabled='+otherLocationTextDisabled.toString()+'&lat='+curLocation['lat']
-    +'&lon='+curLocation['lon']).subscribe(temp=>{
+    +'&lon='+curLocation['lon']).toPromise().then(temp=>{
       let arr=temp.json();
       let results=[];
       for (let i=0;i<arr.length;i++){
@@ -92,7 +92,7 @@ export class ServicesService {
     this.artistsDetailsSubject.next([]);//resets tab: artists/teams
 
     var results={};
-    this.http.get('api/eventdetails?id='+id).subscribe(temp=>{//gets all details
+    this.http.get('api/eventdetails?id='+id).toPromise().then(temp=>{//gets all details
       let arr=temp.json();
       results={
         artists: [],
@@ -136,37 +136,34 @@ export class ServicesService {
       let artistDetails={};
       if (isMusic){
         artistDetails['info']=this.GetArtistInfo(name); //get artist info
+        console.log("got info:"+artistDetails['info']);
       }
       artistDetails['photos']=this.GetArtistPhotos(name); //get artist photo
-
+      console.log("got photos:"+artistDetails['photos']);
       results.push(artistDetails); //push artistDetails to artistsDetails
     }
     return results;
   }
   private GetArtistInfo(artist){
-    var results;
+    var results={};
     console.log("getting "+artist+" info...");
 
-    this.http.get('api/spotify?artist='+artist).subscribe(temp=>{
+    this.http.get('api/spotify?artist='+artist).toPromise().then(temp=>{
       let data=temp.json();
-      results={
-        name: data['name'],
-        popularity: data['popularity'],
-        checkAt: data['external_urls']['spotify']
-      };
-      //for adding commas to the followers string
-      
+      results['name']= data['name'],
+      results['popularity']= data['popularity'],
+      results['checkAt']= data['external_urls']['spotify']
+      //for adding commas to the followers string 
       results['followers']=this.numberWithCommas(data['followers']['total']);
       console.log("got "+artist+" info...:");
       console.log(results);
-
     });
     return results;
   }
 
   private GetArtistPhotos(artist){//in Artist/team tab of event details. Gets photos of artist
     var results=[];//set of arrays. each element is photos for a specific artist/team
-      this.http.get(`api/photos?q=`+artist).subscribe(temp=>{
+      this.http.get(`api/photos?q=`+artist).toPromise().then(temp=>{
         for (let j=0;j<temp.json().length;j++){
           results.push(temp.json()[j]['link']);
         }
