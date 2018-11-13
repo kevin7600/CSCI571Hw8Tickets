@@ -1,33 +1,44 @@
+<!-- <div class="container" [hidden]="!HasArtist()"> -->
+
 <div class="container">
-    <mat-list role="list">
-      <mat-list-item class="row heading" role="listitem">
-          <div class="headingText offset-6">{{artistData.name}}</div>
-      </mat-list-item>
-
-      <mat-list-item class="row" role="listitem">
-          <div class="col-4 bold">Name</div>
-          <div class="offset-2">{{artistData.name}}</div>
-      </mat-list-item>
-
-      <mat-list-item class="row" role="listitem">
-          <div class="col-4 bold">Followers</div>
-          <div class="offset-2">{{artistData.followers}}</div>
-      </mat-list-item>
-
-      <mat-list-item class="row" role="listitem">
-          <div class="col-4 bold">Popularity</div>
-          <div class="offset-2">
-            <div class="popularityNum">{{artistData.popularity}}</div> 
-            <round-progress [current]="artistData.popularity" [max]="100" [color]="'#a3ff72'" 
-            [stroke]="3" [radius]="17" [clockwise]="false">
-            </round-progress>
-
-          </div>
-      </mat-list-item>
-
-      <mat-list-item class="row" role="listitem">
-          <div class="col-4 bold">Check At</div>
-          <div class="offset-2"><a target="_blank" href='{{artistData.checkAt}}'>Spotify</a></div>
-      </mat-list-item>
-    </mat-list>
+    <div *ngFor="let artistDetails of artistsDetails">
+        <!-- Artist Info -->
+        <div *ngIf="HasArtist()">
+            <div class="row">
+                <div class="col-12 text-center bold">{{artistDetails.info.name}}</div>
+            </div>
+            <mat-list role="list">
+                <mat-list-item class="row" role="listitem">
+                    <div class="col-4 bold">Name</div>
+                    <div class="offset-2">{{artistDetails.info.name}}</div>
+                </mat-list-item>
+        
+                <mat-list-item class="row" role="listitem">
+                    <div class="col-4 bold">Followers</div>
+                    <div class="offset-2">{{artistDetails.info.followers}}</div>
+                </mat-list-item>
+        
+                <mat-list-item class="row" role="listitem">
+                    <div class="col-4 bold">Popularity</div>
+                    <div class="offset-2">
+                        <div class="popularityNum">{{artistDetails.info.popularity}}</div> 
+                        <round-progress [current]="artistDetails.info.popularity" [max]="100" [color]="'#a3ff72'" 
+                        [stroke]="3" [radius]="17" [clockwise]="false">
+                        </round-progress>
+                    </div>
+                </mat-list-item>
+        
+                <mat-list-item class="row" role="listitem">
+                    <div class="col-4 bold">Check At</div>
+                    <div class="offset-2"><a target="_blank" href='{{artistDetails.info.checkAt}}'>Spotify</a></div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <!-- Artist Photos -->
+        <div>
+            <a *ngFor="let photo of artistDetails.photos" target="_blank" [href]="photo"
+                ><img  class="photo" [src]="photo">
+            </a>
+        </div>
+    </div>
 </div>

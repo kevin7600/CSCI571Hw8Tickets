@@ -7,7 +7,8 @@ var SpotifyWebApi = require('spotify-web-api-node');
 var db = mongojs('mongodb://kevin:kirbyex7600@ds157923.mlab.com:57923/mytasklist', ['tasks'])
 //Get all apis
 const ticketmasterKey='WUZpipDRqIHiV8jTieLC9mWxEgPBz15c';
-const googleKey='AIzaSyDNUOKu86B3k1O0HL8rO2pSSUG1FJecQqw';
+const googleKey='AIzaSyC7BHd7OmH2zM8-vT88mT7Zfh_iRW3JHzI';
+const googleSearchEngineID='009783632782972079683:ronz5c9btt0';
 var spotifyApi = new SpotifyWebApi({
     clientId: '27c8a3ba4d6d4a1c9c22e3bc8ba77ce7',
     clientSecret: '0acf787ad67e47c1a00ef6918af672d4',
@@ -39,6 +40,22 @@ router.get('/spotify/',function(req,res,next){//calls helper function above
     SpotifyHelper(req,res);
 });
 
+router.get('/photos/',function(req,res,next){
+    const googleSearchAPI='https://www.googleapis.com/customsearch/v1?'+
+        'q='+req.query.q+
+        '&cx='+googleSearchEngineID+
+        '&imgSize=huge'+
+        '&imgType=news'+
+        '&num=8'+
+        '&searchType=image'+
+        '&key='+googleKey;
+    console.log("photos: "+googleSearchAPI);
+    request.get({url: googleSearchAPI,json: true},
+        function(err,response,body){
+            res.json(body['items']);
+        });
+        
+});
 
 router.get('/autocomplete/:keyword',function(req, res, next){
     const TicketAPIKey='https://app.ticketmaster.com/discovery/v2/suggest?apikey='+ticketmasterKey+'&keyword=';

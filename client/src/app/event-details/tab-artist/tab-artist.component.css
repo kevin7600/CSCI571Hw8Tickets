@@ -14,3 +14,8 @@ mat-list-item:nth-child(odd){
     bottom: 12px;
     left: 563px;    
 }
+
+.photo{
+    padding: 15px;
+    width: 33%;
+}

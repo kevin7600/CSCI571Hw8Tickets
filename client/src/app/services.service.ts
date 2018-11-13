@@ -16,9 +16,8 @@ export class ServicesService {
   eventDetailsSubject= new BehaviorSubject({});
   eventDetailsObserver=this.eventDetailsSubject.asObservable();
 
-  artistDetailsSubject= new BehaviorSubject({});
-  artistDetailsObserver=this.artistDetailsSubject.asObservable();
-
+  artistsDetailsSubject= new BehaviorSubject([]);
+  artistsDetailsObserver=this.artistsDetailsSubject.asObservable();
   constructor(private http:Http) { 
     console.log("services initialized");
   }
@@ -89,7 +88,9 @@ export class ServicesService {
 
   GetEventDetails(id:string){
     //TODO, reset all data
-    this.artistDetailsSubject.next({});//resets artists
+    this.eventDetailsSubject.next({});//reset event details
+    this.artistsDetailsSubject.next([]);//resets tab: artists/teams
+
     var results={};
     this.http.get('api/eventdetails?id='+id).subscribe(temp=>{//gets all details
       let arr=temp.json();
@@ -101,10 +102,11 @@ export class ServicesService {
         category: [arr['classifications'][0]['segment']['name']
                   ,arr['classifications'][0]['genre']['name']],
         ticketStatus: arr['dates']['status']['code'],
-        buyTicketAt: arr['url'],
-        seatMap: arr['seatmap']['staticUrl']
+        buyTicketAt: arr['url']
       };
-
+      if (arr['seatmap']!=null){
+        results['seatMap']= arr['seatmap']['staticUrl'];
+      }
       if (arr['priceRanges']!=null){
         results['priceRange']=[arr['priceRanges'][0]['min']
                               ,arr['priceRanges'][0]['max']];
@@ -114,22 +116,64 @@ export class ServicesService {
       }
       this.eventDetailsSubject.next(results);
       this.view=1;//swap to eventDetails Component
-      for (let i=0;i<results['category'].length;i++){//if it's details of music, then get artist info on spotify
-        if (results['category'][i].toLowerCase()=='music'){
-          this.http.get('api/spotify?artist='+results['artists'][0]).subscribe(temp=>{
-            let data=temp.json();
-            let artistResults={
-              name: data['name'],
-              followers: data['followers']['total'],
-              popularity: data['popularity'],
-              checkAt: data['external_urls']['spotify']
-            };
-            this.artistDetailsSubject.next(artistResults);
-          })
-        }
-      }
+      let artistsDetails=this.GetArtistsDetails(results);//get data for the artist tab (if it is an artist)
 
+      this.artistsDetailsSubject.next(artistsDetails);//update subject
     });
 
+  }
+  private GetArtistsDetails(data){//in Artist/team tab of event details. If is an artist, gets info+photos. Else get just photos
+    let isMusic=false;//if true, get the artistdetails+photos. else just get the photos
+    for (let i=0;i<data['category'].length;i++){//if it's details of music, then get artist info on spotify
+      if (data['category'][i].toLowerCase()=='music'){
+        isMusic=true;
+      }
+
+    }
+    let results=[]//array of artists
+    for (let i=0;i<data['artists'].length;i++){//loop through artists and get photos and (?)info
+      let name=data['artists'][i];
+      let artistDetails={};
+      if (isMusic){
+        artistDetails['info']=this.GetArtistInfo(name); //get artist info
+      }
+      artistDetails['photos']=this.GetArtistPhotos(name); //get artist photo
+
+      results.push(artistDetails); //push artistDetails to artistsDetails
+    }
+    return results;
+  }
+  private GetArtistInfo(artist){
+    var results;
+    console.log("getting "+artist+" info...");
+
+    this.http.get('api/spotify?artist='+artist).subscribe(temp=>{
+      let data=temp.json();
+      results={
+        name: data['name'],
+        popularity: data['popularity'],
+        checkAt: data['external_urls']['spotify']
+      };
+      //for adding commas to the followers string
+      
+      results['followers']=this.numberWithCommas(data['followers']['total']);
+      console.log("got "+artist+" info...:");
+      console.log(results);
+
+    });
+    return results;
+  }
+
+  private GetArtistPhotos(artist){//in Artist/team tab of event details. Gets photos of artist
+    var results=[];//set of arrays. each element is photos for a specific artist/team
+      this.http.get(`api/photos?q=`+artist).subscribe(temp=>{
+        for (let j=0;j<temp.json().length;j++){
+          results.push(temp.json()[j]['link']);
+        }
+      });
+    return results;
+  }
+  private numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }

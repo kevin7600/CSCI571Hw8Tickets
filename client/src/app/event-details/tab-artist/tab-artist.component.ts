@@ -7,11 +7,17 @@ import {ServicesService} from '../../services.service';
   styleUrls: ['./tab-artist.component.css']
 })
 export class TabArtistComponent {
-  artistData={};
+  artistsDetails=[];
+
   constructor(private service:ServicesService) { 
-    this.service.artistDetailsObserver.subscribe(temp=>{
-      this.artistData=temp;
-      console.log(this.artistData);
-    })
+    this.service.artistsDetailsObserver.subscribe(temp=>{
+      this.artistsDetails=temp;
+      console.log(this.artistsDetails);
+      console.log(this.HasArtist());
+    });
+  }
+  HasArtist(){//if music artist, true. if sports or something, false
+    return this.artistsDetails.length!=0 && this.artistsDetails[0]['info']!=null;
+    // return Object.keys(this.artistData).length!=0;
   }
 }
