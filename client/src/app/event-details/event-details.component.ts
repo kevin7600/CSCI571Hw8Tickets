@@ -7,12 +7,25 @@ import {ServicesService} from '../services.service';
   styleUrls: ['./event-details.component.css']
 })
 export class EventDetailsComponent implements OnInit {
-
+  eventName="";
+  eventDetails={};
   constructor(public service:ServicesService) { }
 
   ngOnInit() {
+    this.service.eventDetailsObserver.subscribe(temp=>{
+      this.eventDetails=temp;
+    });
   }
   ShowSearchResults(){
     this.service.view=0;
   }
+  TweetURL(){
+    let URL="https://twitter.com/intent/tweet?text=";
+    let message="Check out "+this.eventDetails['name']+
+      " located at "+this.eventDetails['venue']+
+      ". Website: "+this.eventDetails['buyTicketAt']+
+      " %23CSCI571EventSearch";
+    return URL+message;
+  }
+
 }

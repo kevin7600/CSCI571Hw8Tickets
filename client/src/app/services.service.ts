@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http} from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
-import { ArrayType } from '@angular/compiler';
-import { SearchResultsComponent } from './search-results/search-results.component';
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesService {
-
-  
 
   searchResultsSubject= new BehaviorSubject([]);//after clicking "search" this is populated with next value
   searchResultsObserver=this.searchResultsSubject.asObservable();//this is the current value we see
@@ -18,12 +14,50 @@ export class ServicesService {
 
   artistsDetailsSubject= new BehaviorSubject([{}]);
   artistsDetailsObserver=this.artistsDetailsSubject.asObservable();
+
+  venueDetailsSubject= new BehaviorSubject({});
+  venueDetailsObserver= this.venueDetailsSubject.asObservable();
+
+
+//FAVORITE
+
+  favoritesSubject=new BehaviorSubject([]);
+  favoriteSource=this.favoritesSubject.asObservable();//observes favorites
+
+  // GetFavorites(){
+  //   return localStorage.getItem()
+  // }
+
+  favorites=[];
+  currentSearchResult={};//the event that we are looking at details for right now. so we can see if we need to favorite it or not
+  Favorited(row){
+    let index=this.isFav(row);
+    if (index){//unfavorited
+      this.favorites.splice(index-1,1);
+    }
+    else{//favorited
+      this.favorites.push(row);
+    }
+    this.favoritesSubject.next(this.favorites);
+  }
+  isFav(row){//returns index+1 of favorited, 0 if not found
+    for (let i=0;i<this.favorites.length;i++){
+      if (this.favorites[i]==row){
+        return i+1;
+      }
+    }
+    return 0;
+  }
+//FAVORITE END
+
   constructor(private http:Http) { 
     console.log("services initialized");
   }
   AutComCount:number=0;//so newer auto complete requests will overwrite previous requests
 
   view=0;//0=searchResults, 1=eventDetails
+
+
 
   sendAutoCompleteRequest(keyword:string): string[]{
     if (!keyword)return;//don't autocomplete when there isn't any keyword
@@ -85,12 +119,17 @@ export class ServicesService {
       this.searchResultsSubject.next(results);
     });
   }
-
-  GetEventDetails(id:string){
+  Reset(){
     //TODO, reset all data
     this.eventDetailsSubject.next({});//reset event details
     this.artistsDetailsSubject.next([]);//resets tab: artists/teams
+    this.currentSearchResult={};
+  }
 
+  GetEventDetails(row:{}){
+    this.Reset();
+    this.currentSearchResult=row;
+    let id=row['id'];
     var results={};
     this.http.get('api/eventdetails?id='+id).toPromise().then(temp=>{//gets all details
       let arr=temp.json();
@@ -114,13 +153,36 @@ export class ServicesService {
       for (let i=0;i<arr['_embedded']['attractions'].length;i++){
         results['artists'].push(arr['_embedded']['attractions'][i]['name']);
       }
+      results['name']=arr['name'];
       this.eventDetailsSubject.next(results);
       this.view=1;//swap to eventDetails Component
       let artistsDetails=this.GetArtistsDetails(results);//get data for the artist tab (if it is an artist)
-
       this.artistsDetailsSubject.next(artistsDetails);//update subject
+      
+      let venueDetails=this.GetVenueDetails(results['venue']);
+      this.venueDetailsSubject.next(venueDetails);
     });
+  }
 
+  private GetVenueDetails(venue){//venue tab
+    let results={};
+    results['name']=venue;
+    this.http.get('api/venue?venue='+venue).toPromise().then(temp=>{
+      let arr=temp.json();
+      results['address']=arr['address']['line1'];
+      results['city']=arr['city']['name'] +", "+ arr['state']['name'];
+      if (arr['boxOfficeInfo']!=null){
+        results['phoneNumber']=arr['boxOfficeInfo']['phoneNumberDetail'];
+        results['openHours']=arr['boxOfficeInfo']['openHoursDetail'];
+      }
+      if (arr['generalInfo']!=null){
+        results['generalRule']=arr['generalInfo']['generalRule'];
+        results['generalRule']=arr['generalInfo']['childRule'];
+      }
+      results['lat']=arr['location']['latitude'];
+      results['lon']=arr['location']['longitude'];
+    });
+    return results;
   }
   private GetArtistsDetails(data){//in Artist/team tab of event details. If is an artist, gets info+photos. Else get just photos
     let isMusic=false;//if true, get the artistdetails+photos. else just get the photos
@@ -136,17 +198,15 @@ export class ServicesService {
       let artistDetails={};
       if (isMusic){
         artistDetails['info']=this.GetArtistInfo(name); //get artist info
-        console.log("got info:"+artistDetails['info']);
       }
       artistDetails['photos']=this.GetArtistPhotos(name); //get artist photo
-      console.log("got photos:"+artistDetails['photos']);
+      artistDetails['name']=name;
       results.push(artistDetails); //push artistDetails to artistsDetails
     }
     return results;
   }
   private GetArtistInfo(artist){
     var results={};
-    console.log("getting "+artist+" info...");
 
     this.http.get('api/spotify?artist='+artist).toPromise().then(temp=>{
       let data=temp.json();
@@ -155,8 +215,6 @@ export class ServicesService {
       results['checkAt']= data['external_urls']['spotify']
       //for adding commas to the followers string 
       results['followers']=this.numberWithCommas(data['followers']['total']);
-      console.log("got "+artist+" info...:");
-      console.log(results);
     });
     return results;
   }

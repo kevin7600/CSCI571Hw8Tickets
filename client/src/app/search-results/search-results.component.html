@@ -20,7 +20,7 @@
       <ng-container matColumnDef="event">
         <th mat-header-cell *matHeaderCellDef>Event</th>
         <td matTooltip="{{row.event}}" mat-cell *matCellDef="let row">
-          <div class="blue" role="button" (click)="ShowEventDetails(row.id)">{{row.event}}</div>
+          <div class="blue" role="button" (click)="ShowEventDetails(row)">{{row.event}}</div>
           
         </td>
       </ng-container>
@@ -38,10 +38,10 @@
       <ng-container matColumnDef="favorite">
         <th mat-header-cell *matHeaderCellDef>Favorite</th>
         <td mat-cell *matCellDef="let row">
-          <button (click)= "Favorited(row, $event);" class="starButton" type="button">
+          <button (click)= "service.Favorited(row);" class="starButton" type="button">
             <i class="material-icons starBorder" [hidden]="!isFavoriteTab">delete</i>
-            <i class="material-icons starBorder" [hidden]="isFavoriteTab || isFav(row)">star_border</i>
-            <i class="material-icons star" [hidden]="isFavoriteTab || !isFav(row)">star</i>
+            <i class="material-icons starBorder" [hidden]="isFavoriteTab || service.isFav(row)">star_border</i>
+            <i class="material-icons star" [hidden]="isFavoriteTab || !service.isFav(row)">star</i>
           </button>
         </td>
       </ng-container>

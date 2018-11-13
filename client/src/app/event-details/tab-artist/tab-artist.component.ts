@@ -12,8 +12,6 @@ export class TabArtistComponent {
   constructor(private service:ServicesService) { 
     this.service.artistsDetailsObserver.subscribe(temp=>{
       this.artistsDetails=temp;
-      console.log(this.artistsDetails);
-      console.log(this.HasArtist());
     });
   }
   HasArtist(){//if music artist, true. if sports or something, false

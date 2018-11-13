@@ -1,0 +1,14 @@
+
+mat-list-item{
+    height:initial!important;
+}
+.alternateColor{
+    margin:5px 0px;
+}
+.alternateColor:nth-child(odd){
+    background-color:#f2f2f2;
+}
+
+agm-map {
+    height: 500px;
+}

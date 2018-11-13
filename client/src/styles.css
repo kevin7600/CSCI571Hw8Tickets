@@ -11,3 +11,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .bold{
     font-weight: bold;
 }
+
+/* for favorite button */
+.star{
+color: #e5c600;
+}
+.starBorder{
+color: black; 
+}
+.starButton{
+background-color:white;
+}
+  
+.noPadding{
+    padding: 0px;
+}
+
+.container{
+    padding: 0px;
+}

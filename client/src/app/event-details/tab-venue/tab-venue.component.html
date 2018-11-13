@@ -1,0 +1,18 @@
+<div class="container">
+  <!-- VenueName -->
+  <div class="row">
+      <div class="col-12 text-center bold">{{name}}</div>
+  </div>
+  <!-- VenueInfo -->
+  <mat-list role="list">
+    <div class="alternateColor" *ngFor="let key of GetKeys()">
+      <mat-list-item  *ngIf="headers[key]!=null" class="row" role="listitem">
+          <div class="col-2 bold">{{headers[key]}}</div>
+          <div class="offset-2">{{venueDetails[key]}}</div>
+      </mat-list-item>
+    </div>
+  </mat-list>
+  <agm-map [latitude]="GetLat()" [longitude]="GetLon()">
+    <agm-marker [latitude]="GetLat()" [longitude]="GetLon()"></agm-marker>
+  </agm-map>
+</div>

@@ -4,3 +4,12 @@ mat-tab-group{
 .backButton{
     border: 1px solid #aeaeae;
 }
+
+.twitterButton{
+    margin-right:15px;
+
+}
+.twitterButton img{
+    width:38px;
+    height:36px;
+}

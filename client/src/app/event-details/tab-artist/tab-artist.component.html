@@ -2,11 +2,13 @@
 
 <div class="container">
     <div *ngFor="let artistDetails of artistsDetails">
+        <!-- ArtistName -->
+        <div class="row">
+            <div class="col-12 text-center bold">{{artistDetails.name}}</div>
+        </div>
         <!-- Artist Info -->
         <div *ngIf="HasArtist()">
-            <div class="row">
-                <div class="col-12 text-center bold">{{artistDetails.info.name}}</div>
-            </div>
+
             <mat-list role="list">
                 <mat-list-item class="row" role="listitem">
                     <div class="col-4 bold">Name</div>

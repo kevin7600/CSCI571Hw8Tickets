@@ -11,6 +11,8 @@ import { EventDetailsComponent } from './event-details/event-details.component';
 import { TabEventComponent, SeatMapDialog } from './event-details/tab-event/tab-event.component';
 import { TabArtistComponent } from './event-details/tab-artist/tab-artist.component';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
+import { TabVenueComponent } from './event-details/tab-venue/tab-venue.component';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import {RoundProgressModule} from 'angular-svg-round-progressbar';
     TabEventComponent,
     SeatMapDialog,
     TabArtistComponent,
+    TabVenueComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,10 @@ import {RoundProgressModule} from 'angular-svg-round-progressbar';
     MatTabsModule,
     MatListModule,
     MatDialogModule,
-    RoundProgressModule
+    RoundProgressModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC7BHd7OmH2zM8-vT88mT7Zfh_iRW3JHzI'
+    })
 
   ],
   providers: [],
