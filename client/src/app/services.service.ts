@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
+import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesService {
 
   searchResultsSubject= new BehaviorSubject([]);//after clicking "search" this is populated with next value
-  searchResultsObserver=this.searchResultsSubject.asObservable();//this is the current value we see
   
-  eventDetailsSubject= new BehaviorSubject({});
-  eventDetailsObserver=this.eventDetailsSubject.asObservable();
+  eventDetailsSubject= new BehaviorSubject({});//details of an event
 
-  artistsDetailsSubject= new BehaviorSubject([{}]);
-  artistsDetailsObserver=this.artistsDetailsSubject.asObservable();
+  artistsDetailsSubject= new BehaviorSubject([{}]);//details of specific artist(s)
 
-  venueDetailsSubject= new BehaviorSubject({});
-  venueDetailsObserver= this.venueDetailsSubject.asObservable();
+  venueDetailsSubject= new BehaviorSubject({});//details of venue
+
+  progressBar= "0";//eventSearch progress bar 0 to 100
 
 
 //FAVORITE
@@ -24,25 +23,39 @@ export class ServicesService {
   favoritesSubject=new BehaviorSubject([]);
   favoriteSource=this.favoritesSubject.asObservable();//observes favorites
 
-  // GetFavorites(){
-  //   return localStorage.getItem()
-  // }
+  currentSearchResult={};//if In event details, remember what the results was.. for favorite and detailsButton and highlighting
 
-  favorites=[];
-  currentSearchResult={};//the event that we are looking at details for right now. so we can see if we need to favorite it or not
+  private GetFavorites(){
+    return JSON.parse(localStorage.getItem('favorites'));
+  }
+  private SetFavorites(favorites){
+    localStorage.setItem('favorites',JSON.stringify(favorites));
+    this.favoritesSubject.next(favorites);
+  }
+  private InitializeFavorites(){
+    if (_.isEmpty(this.GetFavorites())){
+      this.SetFavorites([]);
+    } 
+    else{
+      this.SetFavorites(this.GetFavorites());
+    }
+  }
+
   Favorited(row){
+    let favorites=this.GetFavorites();
     let index=this.isFav(row);
     if (index){//unfavorited
-      this.favorites.splice(index-1,1);
+      favorites.splice(index-1,1);
     }
     else{//favorited
-      this.favorites.push(row);
+      favorites.push(row);
     }
-    this.favoritesSubject.next(this.favorites);
+    this.SetFavorites(favorites);
   }
   isFav(row){//returns index+1 of favorited, 0 if not found
-    for (let i=0;i<this.favorites.length;i++){
-      if (this.favorites[i]==row){
+    let favorites=this.GetFavorites();
+    for (let i=0;i<favorites.length;i++){
+      if (_.isEqual(favorites[i],row)){
         return i+1;
       }
     }
@@ -50,14 +63,22 @@ export class ServicesService {
   }
 //FAVORITE END
 
-  constructor(private http:Http) { 
-    console.log("services initialized");
+  constructor(private http:Http) {
+    this.InitializeFavorites();
   }
   AutComCount:number=0;//so newer auto complete requests will overwrite previous requests
 
-  view=0;//0=searchResults, 1=eventDetails
+  view=0;//0=searchResults, 1=eventDetails 2=neither
 
-
+  ShowResults(){
+    this.view=0;
+  }
+  ShowDetails(){
+    this.view=1;
+  }
+  ShowNone(){
+    this.view=2;
+  }
 
   sendAutoCompleteRequest(keyword:string): string[]{
     if (!keyword)return;//don't autocomplete when there isn't any keyword
@@ -94,7 +115,12 @@ export class ServicesService {
   }
 
   GetSearchResults(keywords:string, category:string,distance:number,distanceUnits:string,
+    
     otherLocationKeywords:string,otherLocationTextDisabled:boolean,curLocation:{lat:number,lon:number}){
+    this.Reset();
+    this.progressBar="50";//show progress bar while searching
+    this.ShowResults();
+
     this.http.get('api/searchResults?keywords='+keywords+'&category='+category+'&distance='+distance
     +'&distanceUnits='+distanceUnits+'&otherLocationKeywords='+otherLocationKeywords
     +'&otherLocationTextDisabled='+otherLocationTextDisabled.toString()+'&lat='+curLocation['lat']
@@ -119,15 +145,13 @@ export class ServicesService {
       this.searchResultsSubject.next(results);
     });
   }
-  Reset(){
-    //TODO, reset all data
-    this.eventDetailsSubject.next({});//reset event details
-    this.artistsDetailsSubject.next([]);//resets tab: artists/teams
-    this.currentSearchResult={};
-  }
+
 
   GetEventDetails(row:{}){
     this.Reset();
+    this.progressBar="50";//show progress bar while searching
+    this.ShowResults()//we still need to show the progress bar of eventResults
+
     this.currentSearchResult=row;
     let id=row['id'];
     var results={};
@@ -154,14 +178,22 @@ export class ServicesService {
         results['artists'].push(arr['_embedded']['attractions'][i]['name']);
       }
       results['name']=arr['name'];
+      
       this.eventDetailsSubject.next(results);
-      this.view=1;//swap to eventDetails Component
+      this.ShowDetails();//swap to eventDetails Component
       let artistsDetails=this.GetArtistsDetails(results);//get data for the artist tab (if it is an artist)
       this.artistsDetailsSubject.next(artistsDetails);//update subject
       
       let venueDetails=this.GetVenueDetails(results['venue']);
       this.venueDetailsSubject.next(venueDetails);
     });
+  }
+  Reset(){
+    //TODO, reset all data
+    this.eventDetailsSubject.next({});//reset event details
+    this.artistsDetailsSubject.next([]);//resets tab: artists/teams
+    this.currentSearchResult={};
+    this.ShowNone();//show neither results nor details
   }
 
   private GetVenueDetails(venue){//venue tab

@@ -13,6 +13,7 @@ import { TabArtistComponent } from './event-details/tab-artist/tab-artist.compon
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { TabVenueComponent } from './event-details/tab-venue/tab-venue.component';
 import { AgmCoreModule } from '@agm/core';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -44,10 +45,10 @@ import { AgmCoreModule } from '@agm/core';
     RoundProgressModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyC7BHd7OmH2zM8-vT88mT7Zfh_iRW3JHzI'
-    })
+    }),
 
   ],
-  providers: [],
+  providers: [DatePipe],
   entryComponents: [SeatMapDialog],
   bootstrap: [AppComponent]
 })

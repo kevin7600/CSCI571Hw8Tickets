@@ -1,3 +1,28 @@
 .full-width-table {
   width: 100%;
 }
+
+.noResults{
+  background-color:#f9f2ac;
+  padding:0px 20px;
+  margin: 100px 5px 0px 5px;
+
+}
+.noResults div{
+  color: #99946b;
+  margin: 20px 0px;
+  padding: 0px;
+}
+
+.progress{
+  margin: 100px 5px 0px 5px;
+}
+
+.highlight{
+  background-color:#f9f2ac;
+}
+
+.detailsButton{
+  border: 1px solid #aeaeae;
+  margin: 25px 0px 12px 0px;
+}

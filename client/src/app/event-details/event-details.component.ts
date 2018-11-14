@@ -12,13 +12,12 @@ export class EventDetailsComponent implements OnInit {
   constructor(public service:ServicesService) { }
 
   ngOnInit() {
-    this.service.eventDetailsObserver.subscribe(temp=>{
+    this.service.eventDetailsSubject.asObservable().subscribe(temp=>{
       this.eventDetails=temp;
+      this.service.progressBar="0";
     });
   }
-  ShowSearchResults(){
-    this.service.view=0;
-  }
+
   TweetURL(){
     let URL="https://twitter.com/intent/tweet?text=";
     let message="Check out "+this.eventDetails['name']+

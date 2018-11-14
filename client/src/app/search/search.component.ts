@@ -62,5 +62,6 @@ export  class SearchComponent{
     this.distance=10;
     this.distanceUnits="miles";
     this.otherLocationTextDisabled=true;
+    this.servicesService.Reset();
   }
 }

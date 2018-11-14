@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 import {ServicesService} from '../../services.service';
 @Component({
@@ -19,8 +20,11 @@ export class TabEventComponent implements OnInit {
   seatMap:string="";
 
   showTab:boolean=false;
-  constructor(private service:ServicesService,public dialog: MatDialog) { }
+  constructor(private service:ServicesService,public dialog: MatDialog,private datePipe: DatePipe) { }
 
+  GetFormattedDate(date:string){
+    return this.datePipe.transform(new Date(date));
+  }
   Reset(){
     this.artist="";
     this.venue="";
@@ -33,7 +37,7 @@ export class TabEventComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.eventDetailsObserver.subscribe(temp=>{
+    this.service.eventDetailsSubject.asObservable().subscribe(temp=>{
       this.Reset();
       if (temp['artists']){
         for (let i=0;i<temp['artists'].length;i++){
@@ -47,10 +51,10 @@ export class TabEventComponent implements OnInit {
         this.venue=temp['venue'];
       }
       if (temp['date']){
-        this.time += temp['date'] + "  ";
+        this.time += this.GetFormattedDate(temp['date']);
       }
       if (temp['time']){
-        this.time += temp['time'];
+        this.time += "\xa0\xa0"+temp['time'];
       }
       if (temp['category']){
         for (let i=0;i<temp['category'].length;i++){

@@ -1,10 +1,20 @@
 <div class="container">
+  <!-- Results and Favorite Tabs -->
   <div class="row">
     <button (click)="ShowResultsTab();" class="btn btn-sm offset-5" [ngClass]="{'btn-primary': !isFavoriteTab, 'btn-link': isFavoriteTab}" type="button">Results</button>
     <button (click)="ShowFavoritesTab();" class="btn btn-sm" [ngClass]="{'btn-primary': isFavoriteTab, 'btn-link': !isFavoriteTab}" type="button">Favorites</button>
   </div>
-
-  <div class="mat-elevation-z8">
+  <!-- Details Button -->
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-light btn-sm float-right detailsButton" 
+      type="button" [disabled]="HasSelectedResult()" (click)="service.ShowDetails()">
+        Details >
+      </button>
+    </div>
+    </div>
+  <!-- Search Results -->
+  <div *ngIf="EventDetailsView()==1" class="mat-elevation-z8">
     <table mat-table class="full-width-table" [dataSource]="dataSource" aria-label="Elements">
       <!-- index Column -->
       <ng-container matColumnDef="index">
@@ -20,7 +30,7 @@
       <ng-container matColumnDef="event">
         <th mat-header-cell *matHeaderCellDef>Event</th>
         <td matTooltip="{{row.event}}" mat-cell *matCellDef="let row">
-          <div class="blue" role="button" (click)="ShowEventDetails(row)">{{row.event}}</div>
+          <div class="blue" role="button" (click)="ShowEventDetails(row)">{{DisplayEvent(row.event)}}</div>
           
         </td>
       </ng-container>
@@ -46,10 +56,20 @@
         </td>
       </ng-container>
 
-
-
       <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index;"></tr>
+      <tr mat-row [ngClass]="{'highlight': IsSelectedResult(row)}" *matRowDef="let row; columns: displayedColumns; let i = index;"></tr>
+
     </table>
   </div>
+
+  <!-- No Results Message -->
+  <div *ngIf="EventDetailsView()==2" class="row noResults">
+    <div class="col-10 offset-1">No records.</div>
+  </div>
+
+  <!-- progressBar -->
+  <div *ngIf="this.service.progressBar!='0'" class="row progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+  </div>
+
 </div>

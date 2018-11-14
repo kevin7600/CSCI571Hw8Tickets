@@ -1,41 +1,41 @@
 <div class="container">
     <mat-list role="list">
-      <mat-list-item class="row" role="listitem" [hidden]="!artist">
+      <mat-list-item class="row" role="listitem" *ngIf="artist">
           <div class="col-2 bold">Artist/Team(s)</div>
           <div class="offset-2">{{artist}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem" [hidden]="!venue">
+      <mat-list-item class="row" role="listitem" *ngIf="venue">
           <div class="col-2 bold">Venue</div>
           <div class="offset-2">{{venue}}</div>
       </mat-list-item>
       
-      <mat-list-item class="row" role="listitem" [hidden]="!time">
+      <mat-list-item class="row" role="listitem" *ngIf="time">
           <div class="col-2 bold">Time</div>
           <div class="offset-2">{{time}}</div>
       </mat-list-item>
       
-      <mat-list-item class="row" role="listitem" [hidden]="!category">
+      <mat-list-item class="row" role="listitem" *ngIf="category">
           <div class="col-2 bold">Category</div>
           <div class="offset-2">{{category}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem" [hidden]="!priceRange">
+      <mat-list-item class="row" role="listitem" *ngIf="priceRange">
           <div class="col-2 bold">Price Range</div>
           <div class="offset-2">{{priceRange}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem" [hidden]="!ticketStatus">
+      <mat-list-item class="row" role="listitem" *ngIf="ticketStatus">
           <div class="col-2 bold">Ticket Status</div>
           <div class="offset-2">{{ticketStatus}}</div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem" [hidden]="!buyTicketAt">
+      <mat-list-item class="row" role="listitem" *ngIf="buyTicketAt">
           <div class="col-2 bold">Buy Ticket At</div>
           <div class="offset-2"><a target="_blank" href='{{buyTicketAt}}'>Ticketmaster</a></div>
       </mat-list-item>
 
-      <mat-list-item class="row" role="listitem" [hidden]="!seatMap">
+      <mat-list-item class="row" role="listitem" *ngIf="seatMap">
           <div class="col-2 bold">Seat Map</div>
           <div class="blue offset-2" role="button" (click)="ShowSeatmap()">View Seat Map Here</div>
 

@@ -11,8 +11,7 @@ mat-list-item:nth-child(odd){
 }
 .popularityNum{
     position:absolute;
-    bottom: 12px;
-    left: 563px;    
+    transform:translateX(40%) translateY(20%);
 }
 
 .photo{

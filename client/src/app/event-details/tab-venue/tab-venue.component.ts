@@ -14,7 +14,7 @@ export class TabVenueComponent{
   constructor(private service:ServicesService) { }
 
   ngOnInit(){
-    this.service.venueDetailsObserver.subscribe(temp=>{
+    this.service.venueDetailsSubject.asObservable().subscribe(temp=>{
       console.log(temp['name']);
       console.log(temp['address']);
       this.name=temp['name'];

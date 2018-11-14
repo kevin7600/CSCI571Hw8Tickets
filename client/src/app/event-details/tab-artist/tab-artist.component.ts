@@ -10,7 +10,7 @@ export class TabArtistComponent {
   artistsDetails=[];
 
   constructor(private service:ServicesService) { 
-    this.service.artistsDetailsObserver.subscribe(temp=>{
+    this.service.artistsDetailsSubject.asObservable().subscribe(temp=>{
       this.artistsDetails=temp;
     });
   }
