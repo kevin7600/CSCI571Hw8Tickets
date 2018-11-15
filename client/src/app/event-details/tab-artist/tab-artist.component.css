@@ -14,3 +14,7 @@ mat-list-item{
     margin-left:0px;
     margin-right:0px;
 }
+
+.biggerFont{
+    font-size:18px;
+}

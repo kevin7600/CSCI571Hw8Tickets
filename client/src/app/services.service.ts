@@ -282,6 +282,7 @@ export class ServicesService {
         result['date']=obj['start']['date'];
         result['time']=obj['start']['time'];
         result['type']=obj['type'];
+        result['uri']=obj['uri'];
         results.push(result);
       }
       this.upcomingDetailsSubject.next(results);

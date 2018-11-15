@@ -1,7 +1,9 @@
-<app-search></app-search>
-<div *ngIf="service.view==0" [@resultsAnimation]>
-    <app-search-results></app-search-results>
-</div>
-<div *ngIf="service.view==1" [@DetailsAnimation]>
-    <app-event-details></app-event-details>
+<div class="container-fluid">
+    <app-search></app-search>
+    <div *ngIf="service.view==0" [@resultsAnimation]>
+        <app-search-results></app-search-results>
+    </div>
+    <div *ngIf="service.view==1" [@DetailsAnimation]>
+        <app-event-details></app-event-details>
+    </div>
 </div>

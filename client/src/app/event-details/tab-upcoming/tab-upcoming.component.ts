@@ -1,12 +1,28 @@
 import { Component } from '@angular/core';
 import {ServicesService} from '../../services.service'
 import * as _ from 'lodash';
+import { trigger, state, transition, animate, style } from '@angular/animations'
 
 
 @Component({
   selector: 'app-tab-upcoming',
   templateUrl: './tab-upcoming.component.html',
-  styleUrls: ['./tab-upcoming.component.css']
+  styleUrls: ['./tab-upcoming.component.css'],
+  animations: [
+    trigger('upcomingAnimation', [
+      // state('void', style({
+      //   opacity: 0
+      // })),
+      // transition('void <=> *', animate(1000)),
+      transition(':enter', [
+        style({transform: 'translateY(-700%)', opacity: 0}),
+        animate('400ms ease-in', style({transform: 'translateY(0%)', opacity: 1}))
+      ]),
+      transition(':leave', [
+        animate('400ms ease-in', style({transform: 'translateY(-700%)', opacity: 0}))
+      ])
+    ]),
+  ]
 })
 export class TabUpcomingComponent {
 

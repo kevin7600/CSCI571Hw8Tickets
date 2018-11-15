@@ -22,6 +22,8 @@ export  class SearchComponent{
   distanceUnits:string="miles";
   myOtherLocationText:string="";
   otherLocationTextDisabled : boolean = true;
+  attemptedSubmit: boolean = false;
+  
   radioChangeHandler(event: any){
     if (event.target.value=="other"){
       this.otherLocationTextDisabled=false;
@@ -63,5 +65,6 @@ export  class SearchComponent{
     this.distanceUnits="miles";
     this.otherLocationTextDisabled=true;
     this.servicesService.Reset();
+    this.attemptedSubmit = false;
   }
 }

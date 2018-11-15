@@ -3,6 +3,30 @@
     color:red;
 }
 
-mat-form-field {
-    width:75%
+.red{
+    color: red;
+}
+
+.moveUp{
+    position:absolute;
+
+}
+
+.changeHeight{
+    height:84px;
+    margin-bottom:0px;
+    /* transform:scale(1,.5); */
+}
+.noPadding{
+    padding:0px 0px;
+}
+.leftPadding{
+    padding-left:20px;
+}
+
+.topPadding{
+    padding-top:20px;
+}
+.topMargin{
+    margin-top:20px;
 }

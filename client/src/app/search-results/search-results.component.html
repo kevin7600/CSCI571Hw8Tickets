@@ -1,9 +1,9 @@
-<div class="container">
   <!-- Results and Favorite Tabs -->
   <div class="row">
     <button (click)="ShowResultsTab();" class="btn btn-sm offset-5" [ngClass]="{'btn-primary': !IsFavoritesTab(), 'btn-link': IsFavoritesTab()}" type="button">Results</button>
     <button (click)="ShowFavoritesTab();" class="btn btn-sm" [ngClass]="{'btn-primary': IsFavoritesTab(), 'btn-link': !IsFavoritesTab()}" type="button">Favorites</button>
   </div>
+
   <!-- Details Button -->
   <div class="row">
     <div class="col-12">
@@ -12,7 +12,7 @@
         Details >
       </button>
     </div>
-    </div>
+  </div>
   <!-- Search Results -->
   <div *ngIf="EventDetailsView()==1" class="mat-elevation-z8">
     <table mat-table class="full-width-table" [dataSource]="dataSource" aria-label="Elements">
@@ -69,5 +69,3 @@
   <div *ngIf="EventDetailsView()==3" class="row progress">
     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
   </div>
-
-</div>

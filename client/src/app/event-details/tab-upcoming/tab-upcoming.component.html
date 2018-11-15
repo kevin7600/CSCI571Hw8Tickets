@@ -17,16 +17,16 @@
 
   <!-- List of upcoming events -->
   <mat-list role="list">
-      <mat-list-item *ngFor="let upcomingDetail of upcomingDetails | slice:0:showAmount" class="row" role="listitem">
-        <div class="col-12 margin1">
-          <div class="bold blue">{{upcomingDetail.displayName}}</div>
+      <mat-list-item *ngFor="let upcomingDetail of upcomingDetails | slice:0:showAmount" class="row" role="listitem" [@upcomingAnimation]>
+        <div class="col-md-12 margin1">
+            <div><a [href]="upcomingDetail.uri" target="_blank" class="bold blue">{{upcomingDetail.displayName}}</a></div>
           <span class="orangeRed">Artist: {{upcomingDetail.artist}}</span>&nbsp;&nbsp;<span class="grey">{{service.GetFormattedDate(upcomingDetail.date)}}  {{upcomingDetail.time}}</span>
           <div>Type: {{upcomingDetail.type}}</div>
         </div>
       </mat-list-item>
 
     <div class="row">
-      <div class="col-12 text-center">
+      <div class="col-md-12 text-center">
       <button type="button" class="btn btn-primary btn-sm" (click)="showAmount=upcomingDetails.length" *ngIf="5>=showAmount && upcomingDetails.length>5">Show More</button>
       <button type="button" class="btn btn-primary btn-sm" (click)="showAmount=5" *ngIf="showAmount>5">Show Less</button>
     </div>
@@ -35,5 +35,4 @@
 
   </mat-list>
 </div>
-
 <app-no-results *ngIf="service.IsEmpty(upcomingDetails);"></app-no-results>

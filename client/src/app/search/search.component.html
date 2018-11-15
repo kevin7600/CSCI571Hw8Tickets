@@ -1,68 +1,67 @@
-<div class="container">
-    <div class="jumbotron" style="border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;">
-      <p class="text-center" style="font-weight:bold;">Entertainment Event Ticket Search</p>
-      <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-        
-        <div class="form-group row">
-            <label class="col-3 col-form-label requiredLabel">Keyword</label>
+<div class="jumbotron-fluid" style="border: 1px solid #8e8e8e; background-color:#f4f4f4; padding:10px 100px;">
+    <p class="text-center" style="font-weight:bold;">Entertainment Event Ticket Search</p>
+    <form name="myform" method="POST" id="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+    
+        <div class="form-group row changeHeight">
+            <label class="col-md-2 col-form-label requiredLabel noPadding">Keyword</label>
 
-            <mat-form-field  appearance="outline">
-            <input matInput [matAutocomplete]="auto" class="col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" [ngClass]="{ 'is-invalid': keyword.invalid}" (ngModelChange)="getAutoSuggestions();" required/>
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let autComOp of autComOps" [value]="autComOp">{{autComOp}}</mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-              <div *ngIf="keyword.invalid" class="invalid-feedback offset-3">
-                <div>Please enter a keyword</div>
-              </div>
-          </div>
-          <div class="form-group row">
-              <label class="col-3 col-form-label">Category</label>
-              <select class="form-control col-3" name="Category" id="Category" (change)="getCategory($event)">
-                  <option value="default" selected>All</option>
-                  <option value="music">Music</option>
-                  <option value="sports">Sports</option>
-                  <option value="artsAndTheatre">Arts & Theatre</option>
-                  <option value="film">Film</option>
-                  <option value="miscellaneous">Miscellaneous</option>
-              </select>
-          </div>
-          <div class="form-group row">
-              <label class="col-3 col-form-label">Distance</label>
-              <input class="form-control col-3" type="text" id="distance" name="distance" placeholder="10"  (change)="getDistance($event);" />
-              <select class="form-control col-3 offset-1" name="Category" id="Category" (change)="getDistanceUnits($event)">
-                  <option value="miles" selected>Miles</option>
-                  <option value="kilometers">Kilometers</option>
-              </select>
-          </div>
-          
-          <div class="form-group row" style="margin-bottom:0">
-              <label class="col-3 col-form-label requiredLabel">From</label>
-              <div class="col-9 custom-control custom-radio">
+            <mat-form-field  class="col-md-10 noPadding" appearance="outline">
+                <input matInput [matAutocomplete]="auto" class="col-9" type="text" id="keyword" name="keyword" [(ngModel)]="myKeyword" #keyword="ngModel" 
+                (ngModelChange)="getAutoSuggestions();" placeholder="Enter Artist, Team or Event Name (eg. Lakers)" required/>
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let autComOp of autComOps" [value]="autComOp">{{autComOp}}</mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="attemptedSubmit&&keyword.invalid" class="row noPadding ">
+            <div class="red offset-md-2 col-md-10 noPadding test">Please enter a keyword</div>
+        </div>
+        <div class="form-group row topMargin">
+            <label class="col-md-2 col-form-label noPadding">Category</label>
+            <select class="form-control col-md-2" name="Category" id="Category" (change)="getCategory($event)">
+                <option value="default" selected>All</option>
+                <option value="music">Music</option>
+                <option value="sports">Sports</option>
+                <option value="artsAndTheatre">Arts & Theatre</option>
+                <option value="film">Film</option>
+                <option value="miscellaneous">Miscellaneous</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label noPadding">Distance</label>
+            <input class="form-control col-md-2" type="text" id="distance" name="distance" placeholder="10"  (change)="getDistance($event);" />
+            <select class="form-control col-md-2 offset-md-1" name="Category" id="Category" (change)="getDistanceUnits($event)">
+                <option value="miles" selected>Miles</option>
+                <option value="kilometers">Kilometers</option>
+            </select>
+        </div>
+        
+        <div class="form-group row" style="margin-bottom:0">
+            <label class="col-md-2 col-form-label requiredLabel noPadding">From</label>
+            <div class="col-md-10 custom-control custom-radio">
                 <input class="custom-control-input" type="radio" id="hereLocationRadio" name="startLocation" value="here" (change)="radioChangeHandler($event)" checked>
                 <label class="custom-control-label" for="hereLocationRadio">Current location</label>
-              </div>
-              <div class="custom-control custom-radio offset-3 col-9">
-                  <input class="custom-control-input" type="radio" id="otherLocationRadio" name="startLocation" value="other" (change)="radioChangeHandler($event)">
-                  <label class="custom-control-label" for="otherLocationRadio">Other, Please specify:</label>
-              </div>
-                  <input class="offset-3 col-9 form-control" type="text" id="otherLocationText" name="otherLocationText" [disabled]="otherLocationTextDisabled" [(ngModel)]="myOtherLocationText" #otherLocationText="ngModel" [ngClass]="{'is-invalid': !otherLocationTextDisabled && otherLocationText.invalid}" [required]="!otherLocationTextDisabled"/>
-                  <div *ngIf="otherLocationText.invalid" class="invalid-feedback offset-3">
-                      <div>Please enter a location.</div>
-                  </div>
-          </div>
-          <div class="form-group row">
-          </div>
-  
-          <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-sm" id="searchButton" value="Search" [disabled]="currentLocation['lat']==-1"><i class="material-icons"><div style="font-size:60%;">search</div></i>Search</button>
-              <button type="reset" (click)="Reset();" class="btn btn-light btn-sm" name="clear" value="Clear" style="border: 1px solid #aeaeae; margin-left: 10px;"><i class="material-icons"><div style="font-size:60%;">clear_all</div></i>Clear</button>
-          </div>
-         
-          <input type="hidden" id="myLat" name="myLat">
-          <input type="hidden" id="myLon" name="myLon">
-      </form>
-    </div>
+            </div>
+            <div class="custom-control custom-radio offset-md-2 col-md-10">
+                <input class="custom-control-input" type="radio" id="otherLocationRadio" name="startLocation" value="other" (change)="radioChangeHandler($event)">
+                <label class="custom-control-label" for="otherLocationRadio">Other, Please specify:</label>
+            </div>
+                <div class="offset-md-2 col-md-10 noPadding leftPadding" >
+                    <input class="form-control" type="text" id="otherLocationText" name="otherLocationText" [disabled]="otherLocationTextDisabled" [(ngModel)]="myOtherLocationText" #otherLocationText="ngModel" [ngClass]="{'is-invalid': attemptedSubmit && !otherLocationTextDisabled && otherLocationText.invalid}" [required]="!otherLocationTextDisabled"/>
+                </div>
+                <div *ngIf="attemptedSubmit&&otherLocationText.invalid" class="red offset-md-2 col-md-10">
+                    <div>Please enter a location.</div>
+                </div>
+        </div>
+
+        <div class="form-group row topPadding">
+            <button type="submit" (click)="attemptedSubmit=true" class="btn btn-primary btn-sm" id="searchButton" value="Search" [disabled]="currentLocation['lat']==-1 || f.form.invalid"><i class="material-icons"><div style="font-size:60%;">search</div></i>Search</button>
+            <button type="reset" (click)="Reset();" class="btn btn-light btn-sm" name="clear" value="Clear" style="border: 1px solid #aeaeae; margin-left: 10px;"><i class="material-icons"><div style="font-size:60%;">clear_all</div></i>Clear</button>
+        </div>
+        
+        <input type="hidden" id="myLat" name="myLat">
+        <input type="hidden" id="myLon" name="myLon">
+    </form>
 </div>
-  
-  
+
