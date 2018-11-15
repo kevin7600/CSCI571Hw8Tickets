@@ -10,11 +10,12 @@ import * as _ from 'lodash';
 })
 export class TabUpcomingComponent {
 
-  upcomingDetails;//[{artist,date,displayName,time,type}]
+  upcomingDetails=[];//[{artist,date,displayName,time,type}]
   defaultUpcomingDetails;//for default sort
   keys = ['default,displayName,time,artist,type'];
   order: number = 1; //1 asc, -1 desc;
   currentCategory="default";
+  showAmount=5;//default show only first 5 items
   constructor(private service:ServicesService) {
     this.service.upcomingDetailsSubject.asObservable().subscribe(temp=>{
       this.upcomingDetails=_.cloneDeep(temp);

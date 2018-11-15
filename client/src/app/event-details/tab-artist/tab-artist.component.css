@@ -8,8 +8,7 @@ mat-list-item:nth-child(odd){
 }
 
 .photo{
-    padding: 15px;
-    width: 33%;
+    width:100%;
 }
 mat-list-item{
     margin-left:0px;

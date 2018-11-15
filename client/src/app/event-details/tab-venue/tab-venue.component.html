@@ -7,8 +7,8 @@
   <mat-list role="list">
     <div class="alternateColor" *ngFor="let key of GetKeys()">
       <mat-list-item  *ngIf="headers[key]!=null" class="row" role="listitem">
-          <div class="col-2 bold">{{headers[key]}}</div>
-          <div class="offset-2">{{venueDetails[key]}}</div>
+          <div class="col-md-2 col-md-push-10 bold">{{headers[key]}}</div>
+          <div class="col-md-10 col-md-pull-2">{{venueDetails[key]}}</div>
       </mat-list-item>
     </div>
   </mat-list>

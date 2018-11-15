@@ -1,42 +1,42 @@
 <mat-list *ngIf="!service.IsEmpty(eventDetails);" role="list">
     <mat-list-item class="row" role="listitem" *ngIf="artist">
-        <div class="col-2 bold">Artist/Team(s)</div>
-        <div class="offset-2">{{artist}}</div>
+        <div class="col-4 bold">Artist/Team(s)</div>
+        <div class="col-8">{{artist}}</div>
     </mat-list-item>
 
     <mat-list-item class="row" role="listitem" *ngIf="venue">
-        <div class="col-2 bold">Venue</div>
-        <div class="offset-2">{{venue}}</div>
+        <div class="col-4 bold">Venue</div>
+        <div class="col-8">{{venue}}</div>
     </mat-list-item>
     
     <mat-list-item class="row" role="listitem" *ngIf="time">
-        <div class="col-2 bold">Time</div>
-        <div class="offset-2">{{time}}</div>
+        <div class="col-4 bold">Time</div>
+        <div class="col-8">{{time}}</div>
     </mat-list-item>
     
     <mat-list-item class="row" role="listitem" *ngIf="category">
-        <div class="col-2 bold">Category</div>
-        <div class="offset-2">{{category}}</div>
+        <div class="col-4 bold">Category</div>
+        <div class="col-8">{{category}}</div>
     </mat-list-item>
 
     <mat-list-item class="row" role="listitem" *ngIf="priceRange">
-        <div class="col-2 bold">Price Range</div>
-        <div class="offset-2">{{priceRange}}</div>
+        <div class="col-4 bold">Price Range</div>
+        <div class="col-8">{{priceRange}}</div>
     </mat-list-item>
 
     <mat-list-item class="row" role="listitem" *ngIf="ticketStatus">
-        <div class="col-2 bold">Ticket Status</div>
-        <div class="offset-2">{{ticketStatus}}</div>
+        <div class="col-4 bold">Ticket Status</div>
+        <div class="col-8">{{ticketStatus}}</div>
     </mat-list-item>
 
     <mat-list-item class="row" role="listitem" *ngIf="buyTicketAt">
-        <div class="col-2 bold">Buy Ticket At</div>
-        <div class="offset-2"><a target="_blank" href='{{buyTicketAt}}'>Ticketmaster</a></div>
+        <div class="col-4 bold">Buy Ticket At</div>
+        <div class="col-8"><a target="_blank" href='{{buyTicketAt}}'>Ticketmaster</a></div>
     </mat-list-item>
 
     <mat-list-item class="row" role="listitem" *ngIf="seatMap">
-        <div class="col-2 bold">Seat Map</div>
-        <div class="blue offset-2" role="button" (click)="ShowSeatmap()">View Seat Map Here</div>
+        <div class="col-4 bold">Seat Map</div>
+        <div class="blue col-8" role="button" (click)="ShowSeatmap()">View Seat Map Here</div>
 
     </mat-list-item>
 </mat-list>

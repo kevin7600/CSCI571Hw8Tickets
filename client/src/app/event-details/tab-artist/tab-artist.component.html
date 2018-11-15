@@ -34,11 +34,11 @@
         </mat-list>
     </div>
     <!-- Artist Photos -->
-    <div>
-        <a *ngFor="let photo of artistDetails.photos" target="_blank" [href]="photo"
-            ><img  class="photo" [src]="photo">
+    <div class="row">
+        <a class="col-md-4" *ngFor="let photo of artistDetails.photos" target="_blank" [href]="photo">
+            <img  class="photo" [src]="photo">
         </a>
     </div>
 </div>
 
-<app-no-results *ngIf="service.IsEmpty(artistDetails)"></app-no-results>
+<app-no-results *ngIf="service.IsEmpty(artistsDetails)"></app-no-results>

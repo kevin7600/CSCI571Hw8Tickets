@@ -1,7 +1,7 @@
 <div *ngIf="!service.IsEmpty(upcomingDetails);">
   <!-- Sorting Dropdowns -->
   <div class="row selectRow">
-    <select (change)="Sort($event.target.value)" class="browser-default custom-select col-2 sortSelect">
+    <select (change)="Sort($event.target.value)" class="browser-default custom-select col-md-2 sortSelect">
       <option class="dropdown-item" value="default" [selected]="currentCategory=='default'">default</option>
       <option class="dropdown-item" value="displayName">Event Name</option>
       <option class="dropdown-item" value="time">Time</option>
@@ -9,7 +9,7 @@
       <option class="dropdown-item" value="type">Type</option>
     </select>
 
-    <select (change)="Reverse($event.target.value)" class="browser-default custom-select col-2" [disabled]="currentCategory=='default'">
+    <select (change)="Reverse($event.target.value)" class="browser-default custom-select col-md-2" [disabled]="currentCategory=='default'">
         <option class="dropdown-item" value="ascending" [selected]="order=='1'">Ascending</option>
         <option class="dropdown-item" value="descending">Descending</option>
     </select>
@@ -17,13 +17,22 @@
 
   <!-- List of upcoming events -->
   <mat-list role="list">
-      <mat-list-item *ngFor="let upcomingDetail of upcomingDetails" class="row" role="listitem">
+      <mat-list-item *ngFor="let upcomingDetail of upcomingDetails | slice:0:showAmount" class="row" role="listitem">
         <div class="col-12 margin1">
           <div class="bold blue">{{upcomingDetail.displayName}}</div>
           <span class="orangeRed">Artist: {{upcomingDetail.artist}}</span>&nbsp;&nbsp;<span class="grey">{{service.GetFormattedDate(upcomingDetail.date)}}  {{upcomingDetail.time}}</span>
           <div>Type: {{upcomingDetail.type}}</div>
         </div>
-        </mat-list-item>
+      </mat-list-item>
+
+    <div class="row">
+      <div class="col-12 text-center">
+      <button type="button" class="btn btn-primary btn-sm" (click)="showAmount=upcomingDetails.length" *ngIf="5>=showAmount && upcomingDetails.length>5">Show More</button>
+      <button type="button" class="btn btn-primary btn-sm" (click)="showAmount=5" *ngIf="showAmount>5">Show Less</button>
+    </div>
+    </div>
+
+
   </mat-list>
 </div>
 
