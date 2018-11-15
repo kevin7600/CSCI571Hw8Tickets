@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { DatePipe } from '@angular/common';
 
 import {ServicesService} from '../../services.service';
 @Component({
@@ -19,12 +18,11 @@ export class TabEventComponent implements OnInit {
   buyTicketAt:string="";
   seatMap:string="";
 
+  eventDetails={};
   showTab:boolean=false;
-  constructor(private service:ServicesService,public dialog: MatDialog,private datePipe: DatePipe) { }
+  constructor(private service:ServicesService,public dialog: MatDialog) { }
 
-  GetFormattedDate(date:string){
-    return this.datePipe.transform(new Date(date));
-  }
+
   Reset(){
     this.artist="";
     this.venue="";
@@ -34,11 +32,13 @@ export class TabEventComponent implements OnInit {
     this.ticketStatus="";
     this.buyTicketAt="";
     this.seatMap="";
+    this.eventDetails={};
   }
 
   ngOnInit() {
     this.service.eventDetailsSubject.asObservable().subscribe(temp=>{
       this.Reset();
+      this.eventDetails=temp;
       if (temp['artists']){
         for (let i=0;i<temp['artists'].length;i++){
           this.artist += temp['artists'][i];
@@ -51,7 +51,7 @@ export class TabEventComponent implements OnInit {
         this.venue=temp['venue'];
       }
       if (temp['date']){
-        this.time += this.GetFormattedDate(temp['date']);
+        this.time += this.service.GetFormattedDate(temp['date']);
       }
       if (temp['time']){
         this.time += "\xa0\xa0"+temp['time'];

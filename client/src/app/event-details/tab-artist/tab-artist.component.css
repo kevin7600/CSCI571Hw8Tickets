@@ -2,13 +2,6 @@ mat-list-item:nth-child(odd){
     background-color:#f2f2f2;
 }
 
-.heading{
-    padding:0;
-}
-.headingText{
-    font-size: 15;
-    font-weight:bold;
-}
 .popularityNum{
     position:absolute;
     transform:translateX(40%) translateY(20%);
@@ -17,4 +10,8 @@ mat-list-item:nth-child(odd){
 .photo{
     padding: 15px;
     width: 33%;
+}
+mat-list-item{
+    margin-left:0px;
+    margin-right:0px;
 }

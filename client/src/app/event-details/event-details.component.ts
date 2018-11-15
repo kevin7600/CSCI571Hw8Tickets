@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {ServicesService} from '../services.service';
 
 @Component({
@@ -6,15 +6,12 @@ import {ServicesService} from '../services.service';
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.css']
 })
-export class EventDetailsComponent implements OnInit {
+export class EventDetailsComponent {
   eventName="";
   eventDetails={};
-  constructor(public service:ServicesService) { }
-
-  ngOnInit() {
+  constructor(public service:ServicesService) { 
     this.service.eventDetailsSubject.asObservable().subscribe(temp=>{
       this.eventDetails=temp;
-      this.service.progressBar="0";
     });
   }
 

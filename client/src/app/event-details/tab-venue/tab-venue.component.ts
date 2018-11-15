@@ -11,18 +11,13 @@ export class TabVenueComponent{
   venueDetails={};
   name:string="";
 
-  constructor(private service:ServicesService) { }
-
-  ngOnInit(){
+  constructor(private service:ServicesService) { 
     this.service.venueDetailsSubject.asObservable().subscribe(temp=>{
-      console.log(temp['name']);
-      console.log(temp['address']);
       this.name=temp['name'];
       delete temp['name'];
       this.venueDetails=temp;
     });
   }
-
   GetKeys(){
     return Object.keys(this.venueDetails);
   }

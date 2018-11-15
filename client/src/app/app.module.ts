@@ -14,6 +14,8 @@ import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { TabVenueComponent } from './event-details/tab-venue/tab-venue.component';
 import { AgmCoreModule } from '@agm/core';
 import { DatePipe } from '@angular/common';
+import { TabUpcomingComponent } from './event-details/tab-upcoming/tab-upcoming.component';
+import { NoResultsComponent } from './no-results/no-results.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { DatePipe } from '@angular/common';
     SeatMapDialog,
     TabArtistComponent,
     TabVenueComponent,
+    TabUpcomingComponent,
+    NoResultsComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,9 @@ import { DatePipe } from '@angular/common';
     }),
 
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+  ],
   entryComponents: [SeatMapDialog],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,8 @@
 mat-list-item:nth-child(odd){
     background-color:#f2f2f2;
 }
+mat-list-item{
+    margin-left:0px;
+    margin-right:0px;
+}
 

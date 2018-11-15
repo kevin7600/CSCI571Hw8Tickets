@@ -2,10 +2,17 @@ import { Injectable } from '@angular/core';
 import {Http} from '@angular/http';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
+import { DatePipe } from '@angular/common';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesService {
+  
+  constructor(private http:Http,private datePipe: DatePipe) {
+    this.InitializeFavorites();
+    this.Reset();
+  }
 
   searchResultsSubject= new BehaviorSubject([]);//after clicking "search" this is populated with next value
   
@@ -15,7 +22,12 @@ export class ServicesService {
 
   venueDetailsSubject= new BehaviorSubject({});//details of venue
 
-  progressBar= "0";//eventSearch progress bar 0 to 100
+  upcomingDetailsSubject= new BehaviorSubject([]);
+  private servicesIsBusy= false;//if true, show progress bar
+  GetServicesIsBusy(){
+    return this.servicesIsBusy;
+  }
+  selectedTab:number=0;//0=results tab, 1=favorites tab
 
 
 //FAVORITE
@@ -41,6 +53,9 @@ export class ServicesService {
     }
   }
 
+  FavoritesEmpty(){
+    return _.isEmpty(JSON.parse(localStorage.getItem('favorites'))); 
+  }
   Favorited(row){
     let favorites=this.GetFavorites();
     let index=this.isFav(row);
@@ -63,9 +78,6 @@ export class ServicesService {
   }
 //FAVORITE END
 
-  constructor(private http:Http) {
-    this.InitializeFavorites();
-  }
   AutComCount:number=0;//so newer auto complete requests will overwrite previous requests
 
   view=0;//0=searchResults, 1=eventDetails 2=neither
@@ -95,9 +107,6 @@ export class ServicesService {
               results.push(arr[i]['name']);
             }
           }
-          else{
-            console.log("no results autocomplete");
-          }
         });      
       }
     },750);
@@ -118,7 +127,7 @@ export class ServicesService {
     
     otherLocationKeywords:string,otherLocationTextDisabled:boolean,curLocation:{lat:number,lon:number}){
     this.Reset();
-    this.progressBar="50";//show progress bar while searching
+    this.servicesIsBusy=true;//show progress bar while searching
     this.ShowResults();
 
     this.http.get('api/searchResults?keywords='+keywords+'&category='+category+'&distance='+distance
@@ -138,129 +147,195 @@ export class ServicesService {
       results.sort((a,b)=>{
         return new Date(a.date).getTime()-new Date(b.date).getTime();
       });
-      // for (let i=0;i<results.length;i++){
-      //   results[i]['id']=i+1;
-      //   results[i]['favorite']='X';
-      // }
       this.searchResultsSubject.next(results);
+      this.servicesIsBusy=false;
     });
   }
 
 
   GetEventDetails(row:{}){
     this.Reset();
-    this.progressBar="50";//show progress bar while searching
+    this.servicesIsBusy=true;//show progress bar while searching
     this.ShowResults()//we still need to show the progress bar of eventResults
 
     this.currentSearchResult=row;
     let id=row['id'];
-    var results={};
+    let results={};
     this.http.get('api/eventdetails?id='+id).toPromise().then(temp=>{//gets all details
-      let arr=temp.json();
-      results={
-        artists: [],
-        venue: arr['_embedded']['venues'][0]['name'],
-        date: arr['dates']['start']['localDate'],
-        time: arr['dates']['start']['localTime'],
-        category: [arr['classifications'][0]['segment']['name']
-                  ,arr['classifications'][0]['genre']['name']],
-        ticketStatus: arr['dates']['status']['code'],
-        buyTicketAt: arr['url']
-      };
-      if (arr['seatmap']!=null){
-        results['seatMap']= arr['seatmap']['staticUrl'];
+      if (_.isEmpty(temp.json())){//if event details empty, return empty
+        this.eventDetailsSubject.next({});
       }
-      if (arr['priceRanges']!=null){
-        results['priceRange']=[arr['priceRanges'][0]['min']
-                              ,arr['priceRanges'][0]['max']];
+      else{//not empty, parse details
+        let arr=temp.json();
+        results={
+          artists: [],
+          venue: arr['_embedded']['venues'][0]['name'],
+          date: arr['dates']['start']['localDate'],
+          time: arr['dates']['start']['localTime'],
+          category: [arr['classifications'][0]['segment']['name']
+                    ,arr['classifications'][0]['genre']['name']],
+          ticketStatus: arr['dates']['status']['code'],
+          buyTicketAt: arr['url']
+        };
+        if (arr['seatmap']!=null){
+          results['seatMap']= arr['seatmap']['staticUrl'];
+        }
+        if (arr['priceRanges']!=null){
+          results['priceRange']=[arr['priceRanges'][0]['min']
+                                ,arr['priceRanges'][0]['max']];
+        }
+        for (let i=0;i<arr['_embedded']['attractions'].length;i++){
+          results['artists'].push(arr['_embedded']['attractions'][i]['name']);
+        }
+        results['name']=arr['name'];
+        
+        this.eventDetailsSubject.next(results);
+        
+        this.GetArtistsDetails(results);//get data for the artist tab (if it is an artist)
+  
+        this.GetVenueDetails(results['venue']);
+  
+        this.GetUpcoming(results['venue']);
+        this.ShowDetails();//swap to eventDetails Component
       }
-      for (let i=0;i<arr['_embedded']['attractions'].length;i++){
-        results['artists'].push(arr['_embedded']['attractions'][i]['name']);
-      }
-      results['name']=arr['name'];
-      
-      this.eventDetailsSubject.next(results);
-      this.ShowDetails();//swap to eventDetails Component
-      let artistsDetails=this.GetArtistsDetails(results);//get data for the artist tab (if it is an artist)
-      this.artistsDetailsSubject.next(artistsDetails);//update subject
-      
-      let venueDetails=this.GetVenueDetails(results['venue']);
-      this.venueDetailsSubject.next(venueDetails);
+      this.servicesIsBusy=false;//done with progress bar
+
     });
-  }
-  Reset(){
-    //TODO, reset all data
-    this.eventDetailsSubject.next({});//reset event details
-    this.artistsDetailsSubject.next([]);//resets tab: artists/teams
-    this.currentSearchResult={};
-    this.ShowNone();//show neither results nor details
   }
 
-  private GetVenueDetails(venue){//venue tab
-    let results={};
-    results['name']=venue;
-    this.http.get('api/venue?venue='+venue).toPromise().then(temp=>{
-      let arr=temp.json();
-      results['address']=arr['address']['line1'];
-      results['city']=arr['city']['name'] +", "+ arr['state']['name'];
-      if (arr['boxOfficeInfo']!=null){
-        results['phoneNumber']=arr['boxOfficeInfo']['phoneNumberDetail'];
-        results['openHours']=arr['boxOfficeInfo']['openHoursDetail'];
-      }
-      if (arr['generalInfo']!=null){
-        results['generalRule']=arr['generalInfo']['generalRule'];
-        results['generalRule']=arr['generalInfo']['childRule'];
-      }
-      results['lat']=arr['location']['latitude'];
-      results['lon']=arr['location']['longitude'];
-    });
-    return results;
-  }
   private GetArtistsDetails(data){//in Artist/team tab of event details. If is an artist, gets info+photos. Else get just photos
     let isMusic=false;//if true, get the artistdetails+photos. else just get the photos
     for (let i=0;i<data['category'].length;i++){//if it's details of music, then get artist info on spotify
       if (data['category'][i].toLowerCase()=='music'){
         isMusic=true;
       }
-
     }
-    let results=[]//array of artists
-    for (let i=0;i<data['artists'].length;i++){//loop through artists and get photos and (?)info
-      let name=data['artists'][i];
-      let artistDetails={};
-      if (isMusic){
-        artistDetails['info']=this.GetArtistInfo(name); //get artist info
+    let results=[]//array of artistsDetails
+      if (isMusic){// GetInfo->GetPhotos->GetName->GetInfo...
+        this.GetArtistInfo(data['artists'],0,results); //get artist info
       }
-      artistDetails['photos']=this.GetArtistPhotos(name); //get artist photo
-      artistDetails['name']=name;
-      results.push(artistDetails); //push artistDetails to artistsDetails
-    }
-    return results;
+      else{// GetPhotos->GetName->GetPhotos...
+        this.GetArtistPhotos(data['artists'],0,results);//get team/sports thingy
+      }
   }
-  private GetArtistInfo(artist){
-    var results={};
+  
+  private GetArtistInfo(artists:string[],index:number,results:any[]){
 
-    this.http.get('api/spotify?artist='+artist).toPromise().then(temp=>{
+    this.http.get('api/spotify?artist='+artists[index]).toPromise().then(temp=>{
       let data=temp.json();
-      results['name']= data['name'],
-      results['popularity']= data['popularity'],
-      results['checkAt']= data['external_urls']['spotify']
+      let info={};
+      info['name']= data['name'],
+      info['popularity']= data['popularity'],
+      info['checkAt']= data['external_urls']['spotify']
       //for adding commas to the followers string 
-      results['followers']=this.numberWithCommas(data['followers']['total']);
+      info['followers']=this.numberWithCommas(data['followers']['total']);
+      if (results.length==index){//initialize a detail 
+        results.push({});
+      }
+      results[index]['info']=info;
+      this.GetArtistPhotos(artists,index,results);
     });
-    return results;
   }
 
-  private GetArtistPhotos(artist){//in Artist/team tab of event details. Gets photos of artist
-    var results=[];//set of arrays. each element is photos for a specific artist/team
-      this.http.get(`api/photos?q=`+artist).toPromise().then(temp=>{
+  private GetArtistPhotos(artists:string[],index:number,results:any[]){//in Artist/team tab of event details. Gets photos of artist (AND NAME)
+
+    this.http.get(`api/photos?q=`+artists[index]).toPromise().then(temp=>{
+        let photos=[];
         for (let j=0;j<temp.json().length;j++){
-          results.push(temp.json()[j]['link']);
+          photos.push(temp.json()[j]['link']);
         }
-      });
-    return results;
+        if (results.length==index){//initialize a detail 
+          results.push({});
+        }
+        results[index]['photos']=photos;//push photos
+        this.GetArtistName(artists,index,results);
+    });
+  }
+
+  private GetArtistName(artists:string[],index:number,results:any[]){
+    results[index]['name']=artists[index];
+    index += 1;
+    if (index==artists.length){//end of recursion, send results
+      this.artistsDetailsSubject.next(results);
+    } 
+    else{//continue the recursion
+      if (results[0]['info']!=null){//it's an artist, recurse to info function
+        this.GetArtistInfo(artists,index,results);
+      }
+      else{//not an artist, just get the photos 
+        this.GetArtistPhotos(artists,index,results);
+      }
+    } 
+  }
+  
+  private GetUpcoming(venue){
+    this.http.get('api/upcoming?venue='+venue).toPromise().then(temp=>{
+      if (_.isEmpty(temp.json())){
+        this.upcomingDetailsSubject.next([]);
+      }
+      let results=[];
+      for (let i=0;i<temp.json().length;i++){
+        let obj=temp.json()[i];
+        let result={};
+        result['displayName']=obj['displayName'];
+        result['artist']=obj['performance'][0]['artist']['displayName'];
+        result['date']=obj['start']['date'];
+        result['time']=obj['start']['time'];
+        result['type']=obj['type'];
+        results.push(result);
+      }
+      this.upcomingDetailsSubject.next(results);
+    });
+  }
+  
+  private GetVenueDetails(venue){//venue tab
+    this.http.get('api/venue?venue='+venue).toPromise().then(temp=>{
+      let results={};
+      results['name']=venue;
+      let arr=temp.json();
+      results['address']=arr['address']['line1'];
+      results['city']=arr['city']['name'] +", "+ arr['state']['name'];
+      if (arr['boxOfficeInfo']!=null){
+        if (arr['boxOfficeInfo']['phoneNumberDetail']!=null){
+          results['phoneNumber']=arr['boxOfficeInfo']['phoneNumberDetail'];
+        }
+        if (arr['boxOfficeInfo']['openHoursDetail']!=null){
+          results['openHours']=arr['boxOfficeInfo']['openHoursDetail'];
+        }
+      }
+      if (arr['generalInfo']!=null){
+        if (arr['generalInfo']['generalRule']!=null){
+          results['generalRule']=arr['generalInfo']['generalRule'];
+        }
+        if (arr['generalInfo']['childRule']!=null){
+          results['childRule']=arr['generalInfo']['childRule'];
+        }
+      }
+      results['lat']=arr['location']['latitude'];
+      results['lon']=arr['location']['longitude'];
+      this.venueDetailsSubject.next(results);
+
+    });
+  }
+
+  Reset(){
+    //TODO, reset all data
+    this.eventDetailsSubject.next({});//reset event details
+    this.artistsDetailsSubject.next([]);//resets tab: artists/teams
+    this.venueDetailsSubject.next({});//resets tab: venue
+    this.upcomingDetailsSubject.next([]);//resets tab: upcoming
+    this.currentSearchResult={};
+    this.ShowNone();//show neither results nor details
   }
   private numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  GetFormattedDate(date:string){
+    return this.datePipe.transform(new Date(date));
+  }
+
+  IsEmpty(data){
+    return _.isEmpty(data);
   }
 }

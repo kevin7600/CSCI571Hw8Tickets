@@ -13,3 +13,7 @@ mat-tab-group{
     width:38px;
     height:36px;
 }
+mat-list-item{
+    margin-left:0px;
+    margin-right:0px;
+}

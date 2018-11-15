@@ -1,15 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var mongojs = require('mongojs');
-var request=require('request');
-var geohash = require('ngeohash');
-var SpotifyWebApi = require('spotify-web-api-node');
-var db = mongojs('mongodb://kevin:kirbyex7600@ds157923.mlab.com:57923/mytasklist', ['tasks'])
+const express = require('express');
+const router = express.Router();
+const mongojs = require('mongojs');
+const request=require('request');
+const geohash = require('ngeohash');
+const SpotifyWebApi = require('spotify-web-api-node');
+const db = mongojs('mongodb://kevin:kirbyex7600@ds157923.mlab.com:57923/mytasklist', ['tasks'])
 //Get all apis
 const ticketmasterKey='WUZpipDRqIHiV8jTieLC9mWxEgPBz15c';
 const googleKey='AIzaSyC7BHd7OmH2zM8-vT88mT7Zfh_iRW3JHzI';
 const googleSearchEngineID='009783632782972079683:ronz5c9btt0';
-var spotifyApi = new SpotifyWebApi({
+const songkickAPIKey='sCjJxYJg3pdqNol4';
+const spotifyApi = new SpotifyWebApi({
     clientId: '27c8a3ba4d6d4a1c9c22e3bc8ba77ce7',
     clientSecret: '0acf787ad67e47c1a00ef6918af672d4',
   });
@@ -40,6 +41,36 @@ router.get('/spotify/',function(req,res,next){//calls helper function above
     SpotifyHelper(req,res);
 });
 
+router.get('/upcoming/',function(req,res,next){//get upcoming events for upcoming tab
+    const songkickVenueURL='https://api.songkick.com/api/3.0/search/venues.json?'+
+        'query='+req.query.venue+
+        '&apikey='+songkickAPIKey;
+        console.log("songkick venue: "+songkickVenueURL);
+        request.get({url: songkickVenueURL, json:true},
+            function(err,response,body){
+                if (!body['resultsPage']['results'].hasOwnProperty('venue')){//no results, send back nothing
+                    console.log("no upcoming results for: ",songkickVenueURL);
+                    res.json({});
+                }
+                else{
+                    let venueId=body['resultsPage']['results']['venue'][0]['id'];
+                    const songKickUpcomingURL='https://api.songkick.com/api/3.0/venues/'+
+                    venueId+'/calendar.json?'+
+                    'apikey='+songkickAPIKey;
+                    console.log("upcoming upcoming search",songKickUpcomingURL);
+                    request.get({url:songKickUpcomingURL,json:true},
+                        function(err,response,body){
+                            if (!body['resultsPage']['results'].hasOwnProperty('event')){
+                                res.json({});
+                            }
+                            else{
+                                res.json(body['resultsPage']['results']['event']);
+                            }
+                        });
+                }
+            });
+});
+
 router.get('/photos/',function(req,res,next){
     const googleSearchAPI='https://www.googleapis.com/customsearch/v1?'+
         'q='+req.query.q+
@@ -49,7 +80,6 @@ router.get('/photos/',function(req,res,next){
         '&num=8'+
         '&searchType=image'+
         '&key='+googleKey;
-    console.log("photos: "+googleSearchAPI);
     request.get({url: googleSearchAPI,json: true},
         function(err,response,body){
             res.json(body['items']);
@@ -57,16 +87,24 @@ router.get('/photos/',function(req,res,next){
         
 });
 
-router.get('/venue/',function(req,res,next){
+function VenueHelper(req,res){
     const venueAPICall='https://app.ticketmaster.com/discovery/v2/venues?'+
         'apikey='+ticketmasterKey+
         '&keyword='+req.query.venue;
-    console.log("venue: "+venueAPICall);
     request.get({url: venueAPICall,json: true},
         function(err,response,body){
-            res.json(body['_embedded']['venues'][0]);
-        });
+            if (!body.hasOwnProperty('_embedded')){//spike arrest, keep trying until it works
+                console.log("Venue Spike arrest!");
+                VenueHelper(req,res);
+            }
+            else{
+                res.json(body['_embedded']['venues'][0]);
+            }
 
+        });
+}
+router.get('/venue/',function(req,res,next){
+    VenueHelper(req,res);
 });
 
 router.get('/autocomplete/:keyword',function(req, res, next){
@@ -94,8 +132,6 @@ router.get('/searchresults/',function(req,res,next){
         const googleGeocodeAPI='https://maps.googleapis.com/maps/api/geocode/json?address='+req.query.otherLocationKeywords+'&key='+googleKey;
         request.get({url:googleGeocodeAPI,json:true},
             function(err,response,body){
-                console.log(googleGeocodeAPI);
-                // console.log(body);
                 if (body.hasOwnProperty('results') && body['results'][0].hasOwnProperty('geometry') 
                 && body['results'][0]['geometry'].hasOwnProperty('location')){
                     let lat=body['results'][0]['geometry']['location']['lat'];

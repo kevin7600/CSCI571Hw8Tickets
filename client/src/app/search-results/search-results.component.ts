@@ -12,7 +12,6 @@ export class SearchResultsComponent implements OnInit {
   dataSource;//either set to resultsSource or favoriteSource
   resultsSource;//observes results
   resultsEmpty:boolean=true;//for deciding whether to show empty error message
-  isFavoriteTab:boolean=false;
   
   displayedColumns = ['index', 'date', 'event', 'category', 'venueInfo', 'favorite'];
   constructor(private service:ServicesService){}
@@ -21,9 +20,8 @@ export class SearchResultsComponent implements OnInit {
     this.dataSource = this.service.searchResultsSubject.asObservable();//for server
     this.resultsSource=this.dataSource;
     this.service.searchResultsSubject.asObservable().subscribe(temp=>{
-      this.service.progressBar="0";
+      // this.service.progressBar="0";
       this.resultsEmpty= (temp.length==0);
-
     });
     
   }
@@ -38,21 +36,25 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ShowResultsTab(){
-    this.isFavoriteTab=false;
+    this.service.selectedTab=0;
     this.dataSource=this.resultsSource;
   }
   ShowFavoritesTab(){
-    this.isFavoriteTab=true;
+    this.service.selectedTab=1;
     this.dataSource=this.service.favoriteSource;
+  }
+  IsFavoritesTab(){
+    return this.service.selectedTab==1;
   }
   ShowEventDetails(row){
     this.service.GetEventDetails(row);
   }
   EventDetailsView():number{//should it show: 1=search results, 2=no results message, or 3=progress bar?
-    if (this.service.progressBar!="0"){//if progress bar isn't 0, always show it
+    if (this.service.GetServicesIsBusy()){//if busy, show progress bar
       return 3;
     }
-    else if  (this.resultsEmpty){//show no results message
+    else if  ((this.service.selectedTab==0&&this.resultsEmpty) 
+      || (this.service.selectedTab==1&&this.service.FavoritesEmpty())){//show no results message
       return 2;
     }
     else{//show search results

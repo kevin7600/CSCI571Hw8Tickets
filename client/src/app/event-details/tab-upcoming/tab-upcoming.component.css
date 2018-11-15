@@ -1,0 +1,26 @@
+mat-list-item{
+    height:initial!important;
+    border: 1px solid #c9c9c9;
+    margin: 10px 0px;
+}
+
+.margin1{
+    margin: 25px 0px;
+}
+
+.orangeRed{
+    color:#ff8e56;
+}
+
+.grey{
+    color: #878787;
+}
+
+.sortSelect{
+    margin-left:15px;
+    margin-bottom: 0px;
+}
+
+.selectRow{
+    margin-top: 30px;
+}
