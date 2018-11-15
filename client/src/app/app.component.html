@@ -1,3 +1,7 @@
-<app-search></app-search>
-<app-search-results [hidden]="service.view!=0"></app-search-results>
-<app-event-details [hidden]="service.view!=1"></app-event-details>
+<app-search ></app-search>
+<div *ngIf="service.view==0" [@resultsAnimation]>
+    <app-search-results></app-search-results>
+</div>
+<div *ngIf="service.view==1" [@DetailsAnimation]>
+    <app-event-details></app-event-details>
+</div>
